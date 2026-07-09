@@ -522,3 +522,59 @@ input.field:focus, select.field:focus, textarea.field:focus { outline: none; bor
   html { scroll-behavior: auto; }
   .rv { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   V2 · 道德经改版：先见精选一点展开 / 锚点 / 本月看点 / 小抽屉
+   ============================================================ */
+button.item.act { cursor: pointer; transition: all var(--t-micro); }
+button.item.act:hover { border-color: var(--brass); transform: translateY(-1px); }
+button.item.act:active { transform: scale(.96); }
+.chips-flow .item.top { background: var(--terra-soft); color: var(--terra); border-color: transparent; font-weight: 600; }
+.tap-hint { margin-top: 10px; font-size: 11.5px; color: var(--ink-3); }
+
+.fold { overflow: hidden; transition: max-height .45s var(--ease-out); }
+.fold.folded { -webkit-mask-image: linear-gradient(#000 58%, transparent); mask-image: linear-gradient(#000 58%, transparent); }
+.fold.folded.f-chips { max-height: 122px; }
+.fold.folded.f-rows { max-height: 200px; }
+.fold.folded.f-grid { max-height: 240px; }
+.fold-btn { display: flex; align-items: center; gap: 6px; margin: 8px auto 0; padding: 7px 16px; border-radius: var(--r-pill); border: 1px dashed var(--brass-line); color: var(--brass); font-size: 12.5px; transition: all var(--t-micro); }
+.fold-btn:hover { border-style: solid; color: var(--terra); }
+.fold-btn i { font-style: normal; transition: transform .3s; }
+.fold-btn:hover i { transform: translateY(2px); }
+
+.anchor-nav { position: sticky; top: calc(60px + env(safe-area-inset-top)); z-index: 30; display: flex; gap: 6px; overflow-x: auto; padding: 9px 10px; margin-top: 16px; border-radius: var(--r-pill); border: 1px solid var(--brass-line); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.anchor-nav::-webkit-scrollbar { display: none; }
+.anchor-nav .chip { flex: none; border-color: transparent; background: transparent; }
+.anchor-nav .chip.on { background: var(--ink); color: var(--paper); }
+.block { scroll-margin-top: calc(124px + env(safe-area-inset-top)); }
+
+.now-card { background: linear-gradient(150deg, var(--terra-soft), var(--surface) 72%); border-color: rgba(199, 92, 61, .4); margin-top: 16px; }
+.now-card h3 { color: var(--terra); display: flex; align-items: center; gap: 10px; font-size: 17px; margin-bottom: 8px; }
+.now-what { font-family: var(--serif); font-size: 16.5px; line-height: 1.75; }
+.ping { width: 10px; height: 10px; border-radius: 50%; background: var(--terra); position: relative; flex: none; }
+.ping::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--terra); animation: ping 1.8s var(--ease-out) infinite; }
+@keyframes ping { from { transform: scale(.4); opacity: .9; } to { transform: scale(1.5); opacity: 0; } }
+
+.b-ico { display: inline-block; }
+.block.in .b-ico { animation: icoPop .55s var(--ease-out) .12s both; }
+@keyframes icoPop { 0% { transform: scale(.4) rotate(-12deg); } 60% { transform: scale(1.22) rotate(5deg); } 100% { transform: scale(1) rotate(0); } }
+
+.p-ico { font-style: normal; display: inline-block; }
+.pheno:hover .p-ico { animation: bob .7s ease-in-out infinite alternate; }
+.item.bob { animation: bobSoft 3.4s ease-in-out infinite alternate; }
+@keyframes bob { to { transform: translateY(-3px) rotate(8deg); } }
+@keyframes bobSoft { to { transform: translateY(-2px); } }
+
+.m-cell.now { position: relative; }
+.m-cell.now::before { content: ""; position: absolute; inset: -1px; border-radius: 12px; border: 1px solid var(--terra); animation: breathe 2.6s ease-in-out infinite; pointer-events: none; }
+@keyframes breathe { 50% { opacity: .2; } }
+
+.sheet-acts { display: grid; gap: 10px; }
+.sheet-acts .btn { width: 100%; }
+.go-links { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; }
+.go { display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: var(--r-pill); background: var(--pine); color: #F2F7F3; font-size: 13px; font-weight: 600; transition: transform var(--t-micro), box-shadow var(--t-micro); }
+.go:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico { animation: none !important; }
+}

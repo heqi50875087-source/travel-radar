@@ -37,6 +37,18 @@ require("fs").mkdirSync(OUT, { recursive: true });
     await page.screenshot({ path: `${OUT}/${tag}-4city.png`, fullPage: true });
     const blockCount = await page.locator(".block").count();
 
+    // V2: 折叠展开 + 条目小抽屉 + 本月看点
+    const nowCard = await page.locator(".now-card").count();
+    const foldBtn = page.locator(".fold-btn").first();
+    if (await foldBtn.count()) { await foldBtn.click(); await page.waitForTimeout(550); }
+    await page.locator(".chips-flow .item.act").first().click();
+    await page.waitForTimeout(450);
+    const sheetOn = await page.locator(".sheet-acts").count();
+    await page.screenshot({ path: `${OUT}/${tag}-4b-sheet.png` });
+    if (sheetOn) await page.click("#sheetX");
+    if (!sheetOn) errors.push(`[${tag}] 条目抽屉未弹出`);
+    if (!nowCard) errors.push(`[${tag}] 本月看点缺失`);
+
     // 收藏
     await page.click("#favBtn");
     await page.waitForTimeout(300);

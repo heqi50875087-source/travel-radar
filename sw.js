@@ -1,5 +1,5 @@
 /* 旅行雷达 Service Worker · 离线可用 */
-const VERSION = "tr-v1";
+const VERSION = "tr-v2";
 const SHELL = [
   "./",
   "./index.html",
