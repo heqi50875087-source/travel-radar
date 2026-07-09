@@ -1,0 +1,17 @@
+{
+  "name": "旅行雷达 · 一个人的旅行参谋部",
+  "short_name": "旅行雷达",
+  "description": "217 城离线旅行决策与深度档案：这个月去哪、怎么玩透、一个人也从容。零广告，数据不出你的手机。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F1E9",
+  "theme_color": "#F6F1E9",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
