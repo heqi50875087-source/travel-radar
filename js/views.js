@@ -287,11 +287,7 @@
     if (d && d.wildlife && d.wildlife.length) B("wild", "野生", "", "🐦", "野生小友", d.wildlife.length, fold(`<div class="pheno-grid">${d.wildlife.map((w) => `
       <div class="pheno"><div class="p-name"><i class="p-ico">${esc(w.icon || "🐾")}</i> ${esc(w.name)}</div><div class="p-where">${esc(w.where || "")}</div>${w.tip ? `<div class="p-when">${esc(w.tip)}</div>` : ""}</div>`).join("")}</div>`, "grid", d.wildlife.length, 6));
     // 交通住宿 + 一键预订跳转（融合：查-订-导航一条线）
-    const goLinks = `<div class="go-links">
-        <a class="go" target="_blank" rel="noopener" href="https://www.12306.cn/index/">🚄 12306 购票</a>
-        <a class="go" target="_blank" rel="noopener" href="${amap("酒店")}">🏨 高德搜${esc(c.id)}酒店</a>
-        <a class="go" target="_blank" rel="noopener" href="${amap("美食")}">🍜 高德搜${esc(c.id)}美食</a>
-      </div>`;
+    const goLinks = `<div class="go-links" id="bizGoLinks"></div>`;  // M1: TR.biz.renderLinks 注入订票深链
     if (d && d.radar && d.radar.travel) {
       const t = d.radar.travel;
       B("go", "交通住宿", "wide", "🚄", "抵达与住宿", "", `<div class="list-rows">
@@ -394,6 +390,9 @@
       }, { rootMargin: "-30% 0px -60% 0px" });
       anchors.forEach((a) => { const el = $("#a-" + a.aid); if (el) spy.observe(el); });
     }
+    // M1 订票深链 + M3「分享这座城」按钮（DOM 就绪后注入；模块缺席则无副作用）
+    if (window.TR && TR.biz) { const _bs = $("#bizGoLinks", body); if (_bs) TR.biz.renderLinks(_bs, c); }
+    if (window.TR && TR.share) { const _ah = $(".profile-acts", body); if (_ah) TR.share.button(_ah, c); }
     TR.fx.reveal(body);
   }
 
@@ -611,6 +610,9 @@
       const addr = $("#stayAddr");
       addr && addr.addEventListener("blur", () => { trip.stayAddr = addr.textContent.trim(); TR.persist(); });
     }
+    // M1 行程→订单卡（仅行程 tab） + M2 装备清单「购」按钮（仅装备 tab）
+    if (tab === "itin" && window.TR && TR.biz) TR.biz.tripCard($("#tripInner", root), [c], { from: S.settings.from });
+    if (tab === "pack" && window.TR && TR.biz) TR.biz.decorateGearList($("#tripInner", root), { itemSelector: ".pack-item" });
     TR.fx.reveal(root);
   }
 
@@ -714,6 +716,8 @@
         TR.wipeState(); V.me(root); TR.toast("已清空");
       }
     });
+    // M1 合规页脚（配置为空时仅一行中性披露，无外联）
+    if (window.TR && TR.biz) TR.biz.renderFooterDisclosure(root);
     TR.fx.reveal(root);
   };
 })(window.TR);

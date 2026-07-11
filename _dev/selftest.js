@@ -93,5 +93,131 @@ ok(sc2.emergency.some((x) => x.includes("110")), "国内安全卡含110");
 /* 偏好词典 */
 ok(E.PREFS.length === 16, "16 偏好胶囊");
 
+
+/* ===================== 商业化 M1/M2/M3 断言（自包含 require） ===================== */
+/* ===== 商业化 M1 断言（×14） ===== */
+(function () {
+  const assert = require('assert');
+  const path = require('path');
+  const load = p => { delete require.cache[require.resolve(p)]; return require(p); };
+  const ROOT = path.join(__dirname, '..');
+
+  globalThis.TR_BIZ = {
+    affiliate: { ctrip: '', jd: '', taobao: '', klook: '', tripcom: '' },
+    sponsor: { wechatQR: '', official: '', xiaohongshu: '' },
+    analytics: { provider: '', id: '' },
+    utmSource: 'travel-radar',
+    siteBase: ''
+  };
+  const biz = load(path.join(ROOT, 'js', 'biz.js'));
+
+  // —— 空配置 · 国内城 ——
+  const cn = biz.links({ id: 'hangzhou', name: '杭州', intl: false });
+  assert(cn.length >= 3, 'M1-01 国内城 ≥3 条链接');
+  assert(cn.every(l => /^https:\/\//.test(l.url)), 'M1-02 链接均为 https');
+  assert(cn.every(l => l.url.includes('utm_source=travel-radar')), 'M1-03 国内链接均含 utm_source');
+  assert(cn.every(l => !/[?&](allianceid|sid|aid|refpid)=/i.test(l.url)), 'M1-04 空配置无任何联盟参数');
+  assert(cn.every(l => l.tag === null), 'M1-05 空配置无「推广」标');
+  const labels = cn.map(l => l.label).join('|');
+  assert(/火车|12306/.test(labels) && /酒店/.test(labels) && /门票|玩乐/.test(labels),
+    'M1-06 覆盖 火车/酒店/门票');
+  assert(cn.some(l => l.url.indexOf('https://kyfw.12306.cn/otn/leftTicket/init') === 0),
+    'M1-07 12306 已升级为查询页直达');
+
+  // —— 空配置 · 国际城 ——
+  const os = biz.links({ id: 'tokyo', name: '东京', en: 'Tokyo', intl: true });
+  assert(os.length >= 3, 'M1-08 国际城 ≥3 条链接');
+  assert(os.some(l => l.url.includes('trip.com')) && os.some(l => l.url.includes('klook.com')),
+    'M1-09 国际城自动切换 Trip.com/Klook 组合');
+  assert(os.every(l => l.url.includes('utm_source=travel-radar')), 'M1-10 国际链接均含 utm_source');
+
+  // —— 填入联盟 ID 后 ——
+  globalThis.TR_BIZ.affiliate.ctrip = '888888,999999';
+  globalThis.TR_BIZ.affiliate.klook = '12321';
+  const cn2 = biz.links({ name: '杭州', intl: false });
+  const ad = cn2.filter(l => /[?&]allianceid=888888/.test(l.url));
+  assert(ad.length >= 1 && ad.every(l => /[?&]sid=999999/.test(l.url) && l.tag === '推广'),
+    'M1-11 携程联盟参数拼接正确且带「推广」标');
+  assert(cn2.some(l => l.url.includes('kyfw.12306.cn') && !/allianceid/i.test(l.url)),
+    'M1-12 12306 链接保持干净（不挂联盟参数）');
+  const os2 = biz.links({ name: '东京', en: 'Tokyo', intl: true });
+  assert(os2.some(l => /klook\./.test(l.url) && /[?&]aid=12321/.test(l.url) && l.tag === '推广'),
+    'M1-13 Klook aid 拼接正确且带标');
+
+  // —— 工具函数 ——
+  assert(biz._util.addParams('https://a.b/#/city/x', { u: 1 }) === 'https://a.b/?u=1#/city/x',
+    'M1-14 hash 路由链接参数插在 # 之前');
+
+  // 复位为空配置，避免影响后续断言
+  globalThis.TR_BIZ.affiliate.ctrip = '';
+  globalThis.TR_BIZ.affiliate.klook = '';
+  console.log('✓ 商业化 M1 断言 ×14 全部通过');
+})();
+
+/* ===== 商业化 M2 断言（×6） ===== */
+(function () {
+  const assert = require('assert');
+  const path = require('path');
+  const ROOT = path.join(__dirname, '..');
+
+  globalThis.TR_BIZ = globalThis.TR_BIZ || {
+    affiliate: { ctrip: '', jd: '', taobao: '', klook: '', tripcom: '' },
+    sponsor: {}, analytics: {}, utmSource: 'travel-radar', siteBase: ''
+  };
+  globalThis.TR_BIZ.affiliate.taobao = '';
+  require(path.join(ROOT, 'js', 'biz.js'));                 // 幂等，确保 TR.biz 就绪
+  const gear = require(path.join(ROOT, 'js', 'biz-gear.js'));
+
+  assert(gear.cleanKeyword('防风外套（M码 备用）') === '防风外套', 'M2-01 括号注释净化');
+
+  const g = gear.gearLink('✓ 防滑鞋套（雪地用）');
+  assert(g.length === 2 && g[0].label === '京东' && g[1].label === '淘宝', 'M2-02 京东主 + 淘宝备');
+  assert(g.every(l => l.url.includes('utm_source=travel-radar') && l.url.includes('utm_medium=gear')),
+    'M2-03 均含 utm');
+  assert(g[0].url.startsWith('https://so.m.jd.com/ware/search.action?')
+    && g[0].url.includes(encodeURIComponent('防滑鞋套')), 'M2-04 京东搜索词正确（已净化）');
+  assert(!/refpid=/.test(g[1].url) && g[1].tag === null, 'M2-05 空配置无 refpid、无「推广」标');
+
+  globalThis.TR_BIZ.affiliate.taobao = 'mm_1_2_3';
+  const g2 = gear.gearLink('防风外套');
+  assert(/[?&]refpid=mm_1_2_3/.test(g2[1].url) && g2[1].tag === '推广',
+    'M2-06 填 PID 后 refpid 拼接正确且带「推广」标');
+
+  globalThis.TR_BIZ.affiliate.taobao = '';
+  console.log('✓ 商业化 M2 断言 ×6 全部通过');
+})();
+
+/* ===== 商业化 M3 断言（×6） ===== */
+(function () {
+  const assert = require('assert');
+  const path = require('path');
+  const ROOT = path.join(__dirname, '..');
+
+  globalThis.TR_BIZ = globalThis.TR_BIZ || { utmSource: 'travel-radar', siteBase: '' };
+  const share = require(path.join(ROOT, 'js', 'share.js'));
+
+  const u = share.cityUrl('杭州');
+  assert(u.includes('#/city/' + encodeURIComponent('杭州')), 'M3-01 城市直达 hash 形态正确');
+  assert(u.includes('utm_source=travel-radar') && u.includes('utm_medium=share'),
+    'M3-02 直达链含 utm_source + utm_medium=share');
+  assert(/^https:\/\//.test(u), 'M3-03 Node（无 location）下回落到 siteBase 默认值');
+
+  const lines = share._wrapText('abcdef', 3, s => s.length);   // 伪测宽：1 字符 = 1 宽
+  assert(JSON.stringify(lines) === JSON.stringify(['abc', 'def']), 'M3-04 折行纯函数');
+
+  const d = share.cardData({
+    name: '杭州', sub: '三面云山一面城',
+    spots: ['西湖', { name: '灵隐寺' }, '九溪', '多余的第四条'],
+    food: ['片儿川', '龙井虾仁', '多余']
+  });
+  assert(d.name === '杭州' && d.highlights.length === 3 && d.highlights[1] === '灵隐寺'
+    && d.eats.length === 2 && d.eats[0] === '片儿川', 'M3-05 字段适配：3 看点 + 2 必吃 + 对象取名');
+
+  assert(typeof share.card === 'function' && typeof share.button === 'function',
+    'M3-06 浏览器专用 API 导出完整（card 本体在真机验收）');
+
+  console.log('✓ 商业化 M3 断言 ×6 全部通过');
+})();
+
 console.log(fail === 0 ? `\n✅ 自检通过 ${n}/${n}` : `\n❌ ${fail}/${n} 未过`);
 process.exit(fail ? 1 : 0);

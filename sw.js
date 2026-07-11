@@ -1,9 +1,13 @@
 /* 旅行雷达 Service Worker · 离线可用 */
-const VERSION = "tr-v6";
+const VERSION = "tr-v7";
 const SHELL = [
   "./",
   "./index.html",
   "./css/app.css",
+  "./js/biz-config.js",
+  "./js/biz.js",
+  "./js/biz-gear.js",
+  "./js/share.js",
   "./js/util.js",
   "./js/engine.js",
   "./js/fx.js",

@@ -41,7 +41,8 @@ window.TR = window.TR || {};
   // hash 路由：#/radar  #/city/杭州  #/plan/xxx
   TR.router = {
     parse() {
-      const h = decodeURIComponent(location.hash || "#/radar").replace(/^#\/?/, "");
+      const raw = (location.hash || "#/radar").replace(/^#\/?/, "");
+      const h = decodeURIComponent(raw.split("?")[0]);   // M3: 剥掉 utm 等 query，仅用路径匹配路由
       const seg = h.split("/").filter(Boolean);
       return { view: seg[0] || "radar", arg: seg.slice(1).join("/") || null };
     },

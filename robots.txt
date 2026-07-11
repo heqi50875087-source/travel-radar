@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://heqi50875087-source.github.io/travel-radar/sitemap.xml

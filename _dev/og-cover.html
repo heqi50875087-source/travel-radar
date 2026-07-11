@@ -1,0 +1,57 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>旅行雷达 · og 封面生成器（本地工具，勿部署）</title>
+<style>body{font-family:sans-serif;background:#eee;padding:20px}canvas{width:600px;max-width:100%;border:1px solid #ccc;background:#fff}button{display:block;margin:12px 0;padding:10px 16px;font-size:14px}</style>
+<canvas id="c" width="1200" height="630"></canvas>
+<button id="dl">下载 og-cover.png（存到 assets/）</button>
+<script>
+(function () {
+  var P = { paper:'#F6F1E9', surface:'#FCFAF5', ink:'#211C16',
+            ink2:'rgba(33,28,22,.74)', ink3:'rgba(33,28,22,.52)',
+            terra:'#C75C3D', brass:'#B08A4F' };
+  var SERIF = '"Songti SC","STSong","Noto Serif SC","SimSun",serif';
+  var SANS  = '-apple-system,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif';
+  var c = document.getElementById('c'), g = c.getContext('2d');
+  var W = 1200, H = 630;
+
+  g.fillStyle = P.paper; g.fillRect(0, 0, W, H);
+  g.strokeStyle = P.brass;
+  g.lineWidth = 3;   g.strokeRect(28, 28, W - 56, H - 56);
+  g.lineWidth = 1.2; g.strokeRect(42, 42, W - 84, H - 84);
+
+  g.fillStyle = P.ink; g.textBaseline = 'alphabetic';
+  g.font = '600 118px ' + SERIF;
+  g.fillText('旅行雷达', 84, 220);
+  g.font = '400 40px ' + SANS; g.fillStyle = P.ink2;
+  g.fillText('一个人的旅行参谋部', 84, 292);
+
+  g.strokeStyle = P.brass; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(84, 340); g.lineTo(W - 84, 340); g.stroke();
+
+  g.font = '400 34px ' + SANS; g.fillStyle = P.ink;
+  g.fillText('217 座城市 · 该怎么玩 · 何时去 · 吃什么', 84, 412);
+  g.fillStyle = P.terra;
+  g.fillText('离线可用 · 不跟踪你', 84, 470);
+  g.font = '400 28px ' + SANS; g.fillStyle = P.ink3;
+  g.fillText('heqi50875087-source.github.io/travel-radar', 84, 552);
+
+  // 雷达纹样
+  var x = W - 190, y = 300, r = 108;
+  g.strokeStyle = P.brass; g.fillStyle = P.brass; g.lineWidth = 6;
+  [1, .66, .33].forEach(function (k) { g.beginPath(); g.arc(x, y, r * k, 0, Math.PI * 2); g.stroke(); });
+  g.globalAlpha = .16; g.beginPath(); g.moveTo(x, y);
+  g.arc(x, y, r, -Math.PI / 2, -Math.PI / 6); g.closePath(); g.fill(); g.globalAlpha = 1;
+  g.beginPath(); g.moveTo(x, y);
+  g.lineTo(x + r * Math.cos(-Math.PI / 6), y + r * Math.sin(-Math.PI / 6)); g.stroke();
+  g.beginPath();
+  g.arc(x + r * .55 * Math.cos(-Math.PI / 3.2), y + r * .55 * Math.sin(-Math.PI / 3.2), 10, 0, Math.PI * 2);
+  g.fill();
+
+  document.getElementById('dl').onclick = function () {
+    var a = document.createElement('a');
+    a.download = 'og-cover.png';
+    a.href = c.toDataURL('image/png');
+    a.click();
+  };
+})();
+</script>
