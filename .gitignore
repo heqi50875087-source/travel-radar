@@ -3,3 +3,6 @@ _dev/node_modules/
 _dev/shots/
 _dev/package-lock.json
 _dev/package.json
+.vercel
+.env*
+.env*.local
