@@ -779,6 +779,7 @@
         它相信最好的旅行工具，是<b>最快帮你做完决定就该被关掉</b>的那种；<br>
         它把 ${window.TR_CORE.cities.length} 座城市、${Object.keys(window.TR_DEEP || {}).length || 90} 份深度档案装进口袋，<b>离线也在</b>。<br>
         <span style="font-size:12.5px;color:var(--ink-3)">数据：2024-2026 手工编研城市档案，非实时票价；交通与营业信息出行前请复核。</span></p>
+        ${window.TR && TR.sound ? `<p class="theme-song">♪ 本站主题曲 · <a target="_blank" rel="noopener" href="${TR.sound.netease(TR.sound.ANTHEM.song, TR.sound.ANTHEM.artist)}">${esc(TR.sound.ANTHEM.song)}</a> · ${esc(TR.sound.ANTHEM.artist)}</p>` : ""}
       </section>`;
 
     if (!root._meBound) { root._meBound = true;

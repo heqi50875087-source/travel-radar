@@ -650,6 +650,8 @@ button.item.act:active { transform: scale(.96); }
 .me-sec { position: relative; padding-left: 40px; }
 .me-sec::before { content: ""; position: absolute; top: 12px; bottom: 12px; left: 26px; width: 1px; background: rgba(199, 92, 61, .26); }
 .me-sec::after { content: ""; position: absolute; top: 16px; bottom: 16px; left: 14px; width: 3px; border-radius: 3px; background: repeating-linear-gradient(var(--brass) 0 2px, transparent 2px 11px); opacity: .42; }
+.theme-song { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--brass-line); font-size: 13px; color: var(--brass); }
+.theme-song a { color: var(--terra); border-bottom: 1px dashed var(--terra); text-decoration: none; }
 @keyframes contourDrift { to { background-position: 48px 34px; } }
 @media (prefers-reduced-motion: no-preference) {
   .contour { animation: contourDrift 72s ease-in-out infinite alternate; }        /* 等高线极慢漂移，底图像活的 */
