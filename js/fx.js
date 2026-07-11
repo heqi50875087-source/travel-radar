@@ -200,6 +200,22 @@
     }, { threshold: 0.05 }).observe(canvas);
   };
 
+  /* ---------- 结果网格换档：墨迹重写（旧墨被吸走 → 新卡次第上浮） ---------- */
+  FX.swapGrid = function (el, html) {
+    if (!el) return;
+    if (reduced() || !el.children.length) { el.innerHTML = html; return; }
+    el.getAnimations().forEach((a) => a.cancel());          // 连点：硬打断旧动画，绝不 debounce
+    el.style.minHeight = el.offsetHeight + "px";            // 锁高，防换档时列表跳动
+    el.animate({ opacity: [1, 0], transform: ["none", "translateY(4px)"] },
+      { duration: 120, easing: "ease-out" }).finished.then(() => {
+        el.innerHTML = html;
+        Array.prototype.forEach.call(el.children, (c, i) => c.animate(
+          { opacity: [0, 1], transform: ["translateY(14px)", "none"] },
+          { duration: 320, delay: Math.min(i * 60, 360), easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" }));
+        requestAnimationFrame(() => { el.style.minHeight = ""; });
+      }).catch(() => {});
+  };
+
   /* ---------- 数字滚动 ---------- */
   FX.countUp = function (el, to, dur) {
     if (reduced()) { el.textContent = to; return; }

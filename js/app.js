@@ -81,6 +81,27 @@
     if (TR.state.settings.theme === "auto") TR.applyTheme();
   });
 
+  /* 「关灯/开灯」主题切换：光从开关圆心涌出/收拢（View Transitions；不支持或 reduce-motion 时瞬切） */
+  TR.switchTheme = function (mutate, originEl) {
+    const wasDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const apply = () => { mutate(); TR.applyTheme(); };
+    if (!document.startViewTransition || TR.prefersReducedMotion()) return apply();
+    const el = originEl || document.getElementById("themeBtn");
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const R = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+    document.startViewTransition(apply).ready.then(() => {
+      const toDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (toDark === wasDark) return;   // 明暗未翻转（如 auto→同色），跳过圆形动画
+      const light = [`circle(0px at ${cx}px ${cy}px)`, `circle(${R}px at ${cx}px ${cy}px)`];
+      document.documentElement.animate(
+        { clipPath: toDark ? light.slice().reverse() : light },
+        { duration: toDark ? 640 : 480,                       // 关灯慢、开灯快（人眼暗适应更慢）
+          easing: toDark ? "cubic-bezier(.4,0,.2,1)" : "cubic-bezier(.22,1,.36,1)",
+          pseudoElement: toDark ? "::view-transition-old(root)" : "::view-transition-new(root)" });
+    });
+  };
+
   /* ---------- deep.js 异步加载（script 注入，file:// 可用） ---------- */
   function loadDeep() {
     const s = document.createElement("script");
@@ -110,10 +131,9 @@
   TR.router.onChange(dispatch);
 
   /* ---------- 主题按钮 ---------- */
-  TR.$("#themeBtn").addEventListener("click", () => {
+  TR.$("#themeBtn").addEventListener("click", (e) => {
     const cur = document.documentElement.getAttribute("data-theme");
-    TR.state.settings.theme = cur === "dark" ? "light" : "dark";
-    TR.applyTheme(); TR.persist();
+    TR.switchTheme(() => { TR.state.settings.theme = cur === "dark" ? "light" : "dark"; TR.persist(); }, e.currentTarget);
   });
 
   /* ---------- Service Worker（仅 https；file:// 全功能不依赖） ---------- */

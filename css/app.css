@@ -43,6 +43,7 @@
   --t-micro: .15s;
   --t-card: .28s;
   --t-enter: .5s;
+  --t-sweep: .56s;
   --tabbar-h: 62px;
 }
 
@@ -136,8 +137,13 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
 .topnav a.on::after { transform: scaleX(1); }
 .theme-btn { margin-left: auto; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; transition: transform var(--t-micro); }
 .theme-btn:active { transform: scale(.92); }
-.theme-ico { width: 16px; height: 16px; border-radius: 50%; background: var(--ink); position: relative; overflow: hidden; }
+.theme-ico { width: 16px; height: 16px; border-radius: 50%; background: var(--ink); position: relative; overflow: hidden; transition: transform .35s var(--ease-out); }
 .theme-ico::after { content: ""; position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: var(--paper); }
+[data-theme="dark"] .theme-ico { transform: rotate(180deg); }   /* 拨动开关：月相翻面 */
+
+/* 关灯/开灯：圆形擦除由 JS 用 clip-path 驱动，这里只关掉默认交叉淡化并压好层序 */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+[data-theme="dark"]::view-transition-old(root) { z-index: 1; }   /* 关灯：亮截图置顶收缩 */
 
 /* ---------- 底部 tab（移动） ---------- */
 .tabbar {
@@ -575,6 +581,36 @@ button.item.act:active { transform: scale(.96); }
 .go { display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: var(--r-pill); background: var(--pine); color: #F2F7F3; font-size: 13px; font-weight: 600; transition: transform var(--t-micro), box-shadow var(--t-micro); }
 .go:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
+/* ── 雷达候补：轻推语 + 再扫描 ── */
+.radar-nudge { margin: 4px 2px 0; font-size: 13px; color: var(--ink-3); font-style: italic; }
+.more-foot { display: grid; place-items: center; margin: 18px 0 6px; }
+
+/* ── 城市选择器抽屉 ── */
+.picker-input { cursor: pointer; }
+.city-picker { max-height: 84vh; display: flex; flex-direction: column; }
+.city-picker .search-row { margin: 12px 0 0; }
+.picker-body { overflow-y: auto; -webkit-overflow-scrolling: touch; margin-top: 12px; padding-right: 2px; }
+.pick-group { margin-bottom: 14px; }
+.pick-group h5 { font-size: 12.5px; color: var(--ink-3); margin: 0 0 8px; font-weight: 600; letter-spacing: .04em; }
+.pick-group h5 span { color: var(--brass); font-style: italic; margin-left: 2px; }
+.pick-flow { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick-chip { padding: 8px 13px; border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--surface); font-size: 14px; color: var(--ink); display: inline-flex; align-items: center; gap: 5px; transition: border-color var(--t-micro), background var(--t-micro); }
+.pick-chip:hover { border-color: var(--brass-line); }
+.pick-chip.on { background: var(--terra); color: #fff; border-color: var(--terra); }
+.pick-chip .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brass); display: inline-block; }
+.pick-chip.on .dot { background: rgba(255, 255, 255, .82); }
+
+/* ── 微交互：底栏图标弹跳 / 胶囊落墨 / 笔记已存 / 出发倒计时 ── */
+.tabbar a.on i { animation: tabPop .34s var(--ease-out); }
+@keyframes tabPop { 0% { transform: translateY(-1px) scale(1); } 45% { transform: translateY(-4px) scale(1.16); } 100% { transform: translateY(-1px) scale(1); } }
+.chip.on, .chip.on-terra { animation: chipPop .28s var(--ease-out); }
+@keyframes chipPop { 0% { transform: scale(1); } 45% { transform: scale(1.07); } 100% { transform: scale(1); } }
+.note-saved { display: block; text-align: right; font-size: 12px; color: var(--pine); opacity: 0; transition: opacity var(--t-card); margin-top: 5px; pointer-events: none; }
+.note-saved.show { opacity: 1; }
+.trip-card .t-cd { display: inline-block; margin-left: 8px; font-size: 11.5px; font-weight: 600; color: var(--terra); background: var(--terra-soft); padding: 2px 8px; border-radius: var(--r-pill); vertical-align: middle; }
+.rp-hint { font-size: 11.5px; color: var(--ink-3); }
+
 @media (prefers-reduced-motion: reduce) {
-  .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico { animation: none !important; }
+  .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico,
+  .tabbar a.on i, .chip.on, .chip.on-terra { animation: none !important; }
 }

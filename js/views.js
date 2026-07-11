@@ -28,8 +28,7 @@
     <section class="radar-panel card rv">
       <div class="rp-row">
         <span class="rp-label">出发</span>
-        <input class="from-input" id="fromInput" list="cityList" value="${esc(S.settings.from)}" aria-label="出发城市">
-        <datalist id="cityList">${window.TR_CORE.cities.map((c) => `<option value="${esc(c.id)}">`).join("")}</datalist>
+        <input class="from-input picker-input" id="fromInput" value="${esc(S.settings.from)}" readonly aria-label="出发城市" placeholder="选择出发地">
         <div class="scope-switch" role="group" aria-label="国内或国际">
           <button data-scope="domestic" class="${ctx.scope === "domestic" ? "on" : ""}">🇨🇳 国内</button>
           <button data-scope="intl" class="${ctx.scope === "intl" ? "on" : ""}">🌏 国际</button>
@@ -59,15 +58,31 @@
 
     <div class="sec-head rv"><span class="idx">No.01</span><h2>雷达锁定</h2><span class="hint" id="scanHint"></span></div>
     <div class="top-grid" id="topGrid"></div>
-    <div class="sec-head rv"><span class="idx">No.02</span><h2>候补名单</h2><span class="hint">再往下翻 12 个</span></div>
-    <div class="more-grid" id="moreGrid"></div>`;
+    <p class="radar-nudge rv">三个都不来电？往下翻候补，或回上面调一调口味偏好。</p>
+    <div class="sec-head rv"><span class="idx">No.02</span><h2>候补名单</h2><span class="hint" id="moreHint"></span></div>
+    <div class="more-grid" id="moreGrid"></div>
+    <div class="more-foot"><button class="btn ghost" id="scanMore" hidden>再扫描 12 城 →</button></div>`;
 
+    let lastRes = [], moreShown = 12;
+    const moreCard = (r) => `
+        <article class="card hover mini-card" data-city="${esc(r.city.id)}">
+          <h4>${esc(r.city.id)}</h4>
+          <p class="prov">${esc(r.city.province)}</p>
+          <p class="why">${esc(r.reasons[0] ? r.reasons[0].txt : r.city.tagline)}</p>
+        </article>`;
+    function updateMoreBtn() {
+      const btn = $("#scanMore"), hint = $("#moreHint"), total = Math.max(0, lastRes.length - 3);
+      const shown = Math.min(moreShown, total);
+      if (shown >= total) { btn.hidden = true; hint.textContent = total ? `雷达已扫完全部 ${lastRes.length} 城` : ""; }
+      else { btn.hidden = false; btn.textContent = `再扫描 ${Math.min(12, total - shown)} 城 →`; hint.textContent = `已列 ${shown} / ${total}`; }
+    }
     function recompute() {
       const res = E().recommend({ from: S.settings.from, month: ctx.month, days: ctx.days, prefs: ctx.prefs, scope: ctx.scope, tier: ctx.tier });
-      const top = res.slice(0, 3), more = res.slice(3, 15);
+      lastRes = res; moreShown = 12;   // 换档：候补分页归零回 12
+      const top = res.slice(0, 3), more = res.slice(3, 3 + moreShown);
       $("#scanHint").textContent = `${ctx.month}月 · ${ctx.days}天 · 从${S.settings.from}出发 · 扫描 ${res.length} 城`;
-      $("#topGrid").innerHTML = top.map((r, i) => `
-        <article class="card hover top-card rv in" data-city="${esc(r.city.id)}" data-tilt>
+      TR.fx.swapGrid($("#topGrid"), top.map((r, i) => `
+        <article class="card hover top-card" data-city="${esc(r.city.id)}" data-tilt>
           <span class="edge"></span><span class="rank">No.${i + 1}</span>
           <h3>${esc(r.city.id)}</h3>
           <p class="prov">${esc(r.city.region)} · ${esc(r.city.province)}${r.city.hasDeep ? " · 深度档案 ●" : ""}</p>
@@ -78,13 +93,9 @@
             <button class="btn sm terra" data-open="${esc(r.city.id)}">看档案</button>
             <button class="btn sm ghost" data-fav="${esc(r.city.id)}">${S.favs.includes(r.city.id) ? "已想去 ♥" : "想去 ♡"}</button>
           </div>
-        </article>`).join("");
-      $("#moreGrid").innerHTML = more.map((r) => `
-        <article class="card hover mini-card rv in" data-city="${esc(r.city.id)}">
-          <h4>${esc(r.city.id)}</h4>
-          <p class="prov">${esc(r.city.province)}</p>
-          <p class="why">${esc(r.reasons[0] ? r.reasons[0].txt : r.city.tagline)}</p>
-        </article>`).join("");
+        </article>`).join(""));
+      TR.fx.swapGrid($("#moreGrid"), more.map(moreCard).join(""));
+      updateMoreBtn();
       // 雷达罗盘光点：按真实方位角+距离投到罗盘
       const C = window.TR_CORE.coords, o = C[S.settings.from];
       const dots = [];
@@ -98,17 +109,26 @@
           dots.push({ x: 0.5 + Math.cos(ang) * dist * 0.46, y: 0.5 + Math.sin(ang) * dist * 0.46, hot: i < 3 });
         });
       }
-      const cv = $("#radarCanvas");
-      cv._radarOn = false;
-      TR.fx.radarSweep(cv, { dots });
+      TR.fx.radarSweep($("#radarCanvas"), { dots });   // 原地更新光点，扫描持续运行——不再拆重建（消除频闪 + 泄漏）
       TR.persist();
+    }
+    function scanMore() {   // 候补追加下一批 12（不替换已见，保留空间记忆），滚动锚定到新批首张
+      const total = Math.max(0, lastRes.length - 3), prev = moreShown;
+      moreShown = Math.min(moreShown + 12, total);
+      const grid = $("#moreGrid"), tmp = document.createElement("div");
+      tmp.innerHTML = lastRes.slice(3 + prev, 3 + moreShown).map(moreCard).join("");
+      const nodes = Array.prototype.slice.call(tmp.children);
+      nodes.forEach((c, i) => { grid.appendChild(c); if (!TR.prefersReducedMotion()) c.animate({ opacity: [0, 1], transform: ["translateY(14px)", "none"] }, { duration: 320, delay: Math.min(i * 60, 360), easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" }); });
+      updateMoreBtn();
+      if (nodes[0]) nodes[0].scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     if (!root._radarBound) { root._radarBound = true;
     root.addEventListener("click", (e) => {
       const b = e.target.closest("button, [data-city]");
       if (!b) return;
-      if (b.dataset.scope) { ctx.scope = b.dataset.scope; V.radar(root); return; }
+      if (b.id === "scanMore") { scanMore(); return; }
+      if (b.dataset.scope) { ctx.scope = b.dataset.scope; $$("[data-scope]").forEach((x) => x.classList.toggle("on", x.dataset.scope === ctx.scope)); recompute(); return; }
       if (b.dataset.month) { ctx.month = +b.dataset.month; $$("#monthChips .chip").forEach((c) => c.classList.toggle("on-terra", +c.dataset.month === ctx.month)); recompute(); return; }
       if (b.dataset.days) { ctx.days = TR.clamp(ctx.days + (+b.dataset.days), 1, 20); $("#daysVal").textContent = ctx.days + " 天"; recompute(); return; }
       if (b.dataset.tier) { ctx.tier = b.dataset.tier; $$("[data-tier]").forEach((c) => c.classList.toggle("on", c.dataset.tier === ctx.tier)); recompute(); return; }
@@ -117,16 +137,14 @@
         i >= 0 ? ctx.prefs.splice(i, 1) : ctx.prefs.push(b.dataset.pref);
         b.classList.toggle("on-terra"); recompute(); return;
       }
-      if (b.dataset.fav != null) { TR.toggleFav(b.dataset.fav); recompute(); return; }
+      if (b.dataset.fav != null) { TR.toggleFav(b.dataset.fav); b.textContent = S.favs.includes(b.dataset.fav) ? "已想去 ♥" : "想去 ♡"; return; }
       if (b.dataset.open) { TR.router.go("city/" + b.dataset.open); return; }
       const cardEl = e.target.closest("[data-city]");
       if (cardEl && !e.target.closest("button")) TR.router.go("city/" + cardEl.dataset.city);
     }); }
-    $("#fromInput").addEventListener("change", (e) => {
-      const v = e.target.value.trim();
-      if (cityById(v)) { S.settings.from = v; TR.persist(); recompute(); TR.toast("出发地已设为 " + v); }
-      else TR.toast("没找到这个城市，试试列表里的名字");
-    });
+    $("#fromInput").addEventListener("click", () => cityPicker(S.settings.from, (id) => {
+      S.settings.from = id; $("#fromInput").value = id; TR.persist(); recompute(); TR.toast("出发地已设为 " + id);
+    }));
 
     recompute();
     TR.fx.reveal(root); TR.fx.tilt(root);
@@ -323,7 +341,7 @@
         ${c.passport ? `<div class="row"><span><b>签证：</b>${esc(c.passport)}${c.currency ? " · 货币 " + esc(c.currency) : ""}</span></div>` : ""}
       </div><p class="desc" style="margin-top:10px">这座城市还没收录 14 区块深度档案，以上是基础卡。</p>`);
     }
-    B("note", "笔记", "full", "📝", "我的笔记", "", `<textarea class="note-area" id="cityNote" placeholder="写点什么：想吃的店、朋友的建议、踩过的坑……只保存在你自己的设备里">${esc(S.notes[c.id] || "")}</textarea>`);
+    B("note", "笔记", "full", "📝", "我的笔记", "", `<textarea class="note-area" id="cityNote" placeholder="写点什么：想吃的店、朋友的建议、踩过的坑……只保存在你自己的设备里">${esc(S.notes[c.id] || "")}</textarea><span class="note-saved" id="noteSaved">已记下 ✓</span>`);
 
     body.innerHTML = `
       <section class="profile-hero contour">
@@ -352,6 +370,7 @@
         const v = e.target.value.trim();
         if (v) S.notes[c.id] = v; else delete S.notes[c.id];
         TR.persist();
+        const ns = $("#noteSaved"); if (ns) { ns.classList.add("show"); clearTimeout(ns._t); ns._t = setTimeout(() => ns.classList.remove("show"), 1200); }
       }, 400);
     });
 
@@ -421,6 +440,43 @@
         () => TR.toast("复制失败，长按手动复制"));
     });
   }
+  /* 城市选择器：底部抽屉（复用 modal 体系），可搜索 + 按区域分组 + 想去快捷行。
+     每次打开都是全量列表——根治 datalist「选一个后被过滤锁死」的顽疾。 */
+  function cityPicker(currentValue, onPick) {
+    const S = TR.state, rootM = $("#modal-root"), cities = window.TR_CORE.cities;
+    const close = () => { rootM.innerHTML = ""; };
+    const chip = (c) => `<button class="pick-chip ${c.id === currentValue ? "on" : ""}" data-pick="${esc(c.id)}">${esc(c.id)}${c.hasDeep ? '<i class="dot" title="有深度档案"></i>' : ""}</button>`;
+    function bodyHtml(kw) {
+      kw = (kw || "").trim().toLowerCase();
+      const match = (c) => !kw || [c.id, c.province, c.region, c.tagline, (c.foodTags || []).join(""), (c.mustEat || []).join(""), (c.highlights || []).join("")].join(" ").toLowerCase().includes(kw);
+      let html = "";
+      if (!kw) {
+        const favs = S.favs.map(cityById).filter(Boolean);
+        if (favs.length) html += `<div class="pick-group"><h5>♥ 想去</h5><div class="pick-flow">${favs.map(chip).join("")}</div></div>`;
+      }
+      const list = cities.filter(match);
+      if (!list.length) return `<div class="empty" style="margin-top:20px"><b>没找到「${esc(kw)}」</b>换个词，或搜省份 / 关键词（早茶、雪、古镇）</div>`;
+      REGION_ORDER.forEach((rg) => {
+        const inRg = list.filter((c) => c.region === rg);
+        if (inRg.length) html += `<div class="pick-group"><h5>${esc(rg)} <span>${inRg.length}</span></h5><div class="pick-flow">${inRg.map(chip).join("")}</div></div>`;
+      });
+      return html;
+    }
+    rootM.innerHTML = `<div class="modal-mask" id="pickerMask"><div class="modal-box sheet city-picker">
+      <div class="modal-head"><h3>选择城市</h3><button class="modal-x" id="pickerX">✕</button></div>
+      <div class="search-row"><input class="field" id="pickerSearch" placeholder="搜城市 / 省份 / 关键词（早茶、雪、古镇）" autocomplete="off"></div>
+      <div class="picker-body" id="pickerBody">${bodyHtml("")}</div>
+    </div></div>`;
+    $("#pickerX").addEventListener("click", close);
+    $("#pickerMask").addEventListener("click", (e) => { if (e.target.id === "pickerMask") close(); });
+    $("#pickerSearch").addEventListener("input", (e) => { $("#pickerBody").innerHTML = bodyHtml(e.target.value); });
+    $("#pickerBody").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-pick]");
+      if (b) { onPick(b.dataset.pick); close(); }
+    });
+  }
+  TR.cityPicker = cityPicker;
+
   /* ========== 行囊 ========== */
   V.plan = function (root, arg) {
     const S = TR.state;
@@ -435,10 +491,14 @@
       <section class="card plan-new rv">
         <div class="rp-row">
           <span class="rp-label">目的地</span>
-          <input class="from-input" style="width:150px" id="tripCity" list="cityList2" value="${esc(prefill)}" placeholder="选个城市">
-          <datalist id="cityList2">${window.TR_CORE.cities.map((c) => `<option value="${esc(c.id)}">`).join("")}</datalist>
+          <input class="from-input picker-input" style="width:150px" id="tripCity" value="${esc(prefill)}" readonly placeholder="选个城市">
           <span class="rp-label">月份</span>
           <select class="field" style="width:88px" id="tripMonth">${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${i + 1 === S.ctx.month ? "selected" : ""}>${i + 1}月</option>`).join("")}</select>
+        </div>
+        <div class="rp-row">
+          <span class="rp-label">出发日</span>
+          <input type="date" class="field" id="tripDate" style="max-width:168px">
+          <span class="rp-hint">可选 · 填了行程卡显示倒计时</span>
         </div>
         <div class="rp-row">
           <span class="rp-label">天数</span>
@@ -453,14 +513,17 @@
         <button class="btn terra" id="createTrip">生成行程草稿</button>
       </section>
       <div class="sec-head rv"><span class="idx">Trips</span><h2>我的行程</h2></div>
-      <div class="trip-list" id="tripList">${S.trips.length ? S.trips.map((t) => `
-        <article class="card hover trip-card" data-trip="${t.id}">
-          <div><div class="t-city">${esc(t.city)}</div><div class="t-meta">${t.month}月 · ${t.days} 天 · ${t.pace === "slow" ? "慢游" : t.pace === "rush" ? "特种兵" : "标准"} · 建于 ${esc(t.created)}</div></div>
+      <div class="trip-list" id="tripList">${S.trips.length ? S.trips.map((t) => {
+        let cd = "";
+        if (t.date) { const d = Math.ceil((new Date(t.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000); cd = d > 1 ? `距出发 ${d} 天` : d === 1 ? "明天出发" : d === 0 ? "今天出发" : "已成行"; }
+        return `<article class="card hover trip-card" data-trip="${t.id}">
+          <div><div class="t-city">${esc(t.city)}${cd ? `<span class="t-cd">${cd}</span>` : ""}</div><div class="t-meta">${t.month}月 · ${t.days} 天 · ${t.pace === "slow" ? "慢游" : t.pace === "rush" ? "特种兵" : "标准"} · 建于 ${esc(t.created)}</div></div>
           <span class="t-go">→</span>
-        </article>`).join("") : `<div class="empty"><b>还没有行程</b>上面选个城市，10 秒生成一份草稿</div>`}
+        </article>`; }).join("") : `<div class="empty"><b>还没有行程</b>上面选个城市，10 秒生成一份草稿</div>`}
       </div>`;
 
     let days = 3, pace = "std";
+    $("#tripCity").addEventListener("click", () => cityPicker($("#tripCity").value, (id) => { $("#tripCity").value = id; }));
     $("#tdMinus").addEventListener("click", () => { days = TR.clamp(days - 1, 1, 15); $("#tripDays").textContent = days + " 天"; });
     $("#tdPlus").addEventListener("click", () => { days = TR.clamp(days + 1, 1, 15); $("#tripDays").textContent = days + " 天"; });
     $$("[data-pace]", root).forEach((b) => b.addEventListener("click", () => {
@@ -474,6 +537,7 @@
       const trip = {
         id: "t" + Date.now().toString(36),
         city: cityId, days, month, pace,
+        date: $("#tripDate").value || "",
         created: new Date().toLocaleDateString("zh-CN"),
         itin: null, packDone: {},
       };
@@ -585,8 +649,12 @@
       const pk = e.target.closest("[data-pack]");
       if (pk) {
         trip.packDone = trip.packDone || {};
-        trip.packDone[pk.dataset.pack] = !trip.packDone[pk.dataset.pack];
-        TR.persist(); renderTrip(root, trip); return;
+        const on = !trip.packDone[pk.dataset.pack];
+        trip.packDone[pk.dataset.pack] = on;
+        pk.classList.toggle("done", on);   // 原地切换，不再整页 renderTrip（高频交互 + 性能）
+        const box = pk.querySelector(".box");
+        if (on && box && !TR.prefersReducedMotion()) box.animate({ transform: ["scale(.4)", "scale(1.15)", "scale(1)"] }, { duration: 180, easing: "cubic-bezier(.22,1,.36,1)" });
+        TR.persist(); return;
       }
     }); }
     if (tab === "itin") {
@@ -627,8 +695,7 @@
 
       <section class="card me-sec rv"><h3>⚙️ 设置</h3>
         <div class="set-row"><span class="k">出发地</span><div class="ctl">
-          <input class="from-input" id="meFrom" list="cityList3" value="${esc(S.settings.from)}">
-          <datalist id="cityList3">${window.TR_CORE.cities.map((c) => `<option value="${esc(c.id)}">`).join("")}</datalist></div></div>
+          <input class="from-input picker-input" id="meFrom" value="${esc(S.settings.from)}" readonly></div></div>
         <div class="set-row"><span class="k">预算档</span><div class="ctl">${["经济", "中端", "品质"].map((t) => `<button class="chip ${S.ctx.tier === t ? "on" : ""}" data-tier="${t}">${t}</button>`).join("")}</div></div>
         <div class="set-row"><span class="k">外观</span><div class="ctl">${[["auto", "跟随系统"], ["light", "纸墨"], ["dark", "暗金"]].map(([v, l]) => `<button class="chip ${S.settings.theme === v ? "on" : ""}" data-theme-set="${v}">${l}</button>`).join("")}</div></div>
         <div class="set-row"><span class="k">字号</span><div class="ctl">${[["std", "标准"], ["big", "大字"]].map(([v, l]) => `<button class="chip ${S.settings.font === v ? "on" : ""}" data-font-set="${v}">${l}</button>`).join("")}</div></div>
@@ -680,15 +747,13 @@
       const tier = e.target.closest("[data-tier]");
       if (tier) { TR.state.ctx.tier = tier.dataset.tier; TR.persist(); V.me(root); return; }
       const th = e.target.closest("[data-theme-set]");
-      if (th) { TR.state.settings.theme = th.dataset.themeSet; TR.applyTheme(); TR.persist(); V.me(root); return; }
+      if (th) { const set = th.dataset.themeSet; TR.switchTheme(() => { TR.state.settings.theme = set; TR.persist(); V.me(root); }, th); return; }
       const fs = e.target.closest("[data-font-set]");
       if (fs) { TR.state.settings.font = fs.dataset.fontSet; TR.applyTheme(); TR.persist(); V.me(root); return; }
     }); }
-    $("#meFrom").addEventListener("change", (e) => {
-      const v = e.target.value.trim();
-      if (cityById(v)) { S.settings.from = v; TR.persist(); TR.toast("出发地已设为 " + v); }
-      else TR.toast("没找到这个城市");
-    });
+    $("#meFrom").addEventListener("click", () => cityPicker(S.settings.from, (id) => {
+      S.settings.from = id; $("#meFrom").value = id; TR.persist(); TR.toast("出发地已设为 " + id);
+    }));
     $("#exportBtn").addEventListener("click", () => {
       const blob = new Blob([JSON.stringify({ version: 1, exported: new Date().toISOString(), state: TR.exportState() }, null, 2)], { type: "application/json" });
       const a = document.createElement("a");

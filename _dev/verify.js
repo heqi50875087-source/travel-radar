@@ -56,7 +56,8 @@ require("fs").mkdirSync(OUT, { recursive: true });
     // 行囊：生成行程
     await page.goto(BASE + "/#/plan", { waitUntil: "domcontentloaded" });
     await page.waitForTimeout(500);
-    await page.fill("#tripCity", "扬州");
+    await page.click("#tripCity");                       // 城市选择器抽屉
+    await page.click('.pick-chip[data-pick="扬州"]');
     await page.click("#createTrip");
     await page.waitForTimeout(900);
     await page.screenshot({ path: `${OUT}/${tag}-5trip.png`, fullPage: true });
