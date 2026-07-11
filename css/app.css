@@ -88,6 +88,7 @@ body {
   padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
 }
 [data-font="big"] body, body[data-font="big"] { font-size: 18px; }
+[data-font="xl"] body, body[data-font="xl"] { font-size: 20px; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 input, select, textarea { font: inherit; color: inherit; }
@@ -652,6 +653,8 @@ button.item.act:active { transform: scale(.96); }
 .me-sec::after { content: ""; position: absolute; top: 16px; bottom: 16px; left: 14px; width: 3px; border-radius: 3px; background: repeating-linear-gradient(var(--brass) 0 2px, transparent 2px 11px); opacity: .42; }
 .theme-song { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--brass-line); font-size: 13px; color: var(--brass); }
 .theme-song a { color: var(--terra); border-bottom: 1px dashed var(--terra); text-decoration: none; }
+.dice-btn { margin-top: 22px; border-style: dashed; letter-spacing: .02em; }
+.dice-btn:hover { border-color: var(--terra); color: var(--terra); }
 @keyframes contourDrift { to { background-position: 48px 34px; } }
 @media (prefers-reduced-motion: no-preference) {
   .contour { animation: contourDrift 72s ease-in-out infinite alternate; }        /* 等高线极慢漂移，底图像活的 */

@@ -22,6 +22,7 @@
         <div class="pledge">
           <span><b>零</b>广告 · 零佣金</span><span><b>离线</b>可用</span><span>数据<b>只留在你的设备</b></span>
         </div>
+        <button class="btn ghost dice-btn" id="diceBtn">🎲 抽一座城 · 交给缘分</button>
       </div>
     </section>
 
@@ -127,6 +128,7 @@
     root.addEventListener("click", (e) => {
       const b = e.target.closest("button, [data-city]");
       if (!b) return;
+      if (b.id === "diceBtn") { TR.randomCity(); return; }
       if (b.id === "scanMore") { scanMore(); return; }
       if (b.dataset.scope) { ctx.scope = b.dataset.scope; $$("[data-scope]").forEach((x) => x.classList.toggle("on", x.dataset.scope === ctx.scope)); recompute(); return; }
       if (b.dataset.month) { ctx.month = +b.dataset.month; $$("#monthChips .chip").forEach((c) => c.classList.toggle("on-terra", +c.dataset.month === ctx.month)); recompute(); return; }
@@ -445,7 +447,7 @@
         if (pb) { gPace = pb.dataset.p; $$("#gPace .chip", gc).forEach((x) => x.classList.toggle("on", x.dataset.p === gPace)); paint(); return; }
         if (e.target.closest("#guideSave")) {
           const trip = TR.createTrip(c.id, gDays, S.ctx.month, gPace, "");
-          S.trips.unshift(trip); TR.persist(); TR.toast("已存进行囊 🎒"); TR.router.go("plan/" + trip.id); return;
+          S.trips.unshift(trip); TR.persist(); if (TR.sfx) TR.sfx.save(); TR.toast("已存进行囊 🎒"); TR.router.go("plan/" + trip.id); return;
         }
         if (e.target.closest("#guideCopy")) {
           const itin = E().genItinerary(c.id, gDays, gPace);
@@ -739,7 +741,8 @@
           <input class="from-input picker-input" id="meFrom" value="${esc(S.settings.from)}" readonly></div></div>
         <div class="set-row"><span class="k">预算档</span><div class="ctl">${["经济", "中端", "品质"].map((t) => `<button class="chip ${S.ctx.tier === t ? "on" : ""}" data-tier="${t}">${t}</button>`).join("")}</div></div>
         <div class="set-row"><span class="k">外观</span><div class="ctl">${[["auto", "跟随系统"], ["light", "纸墨"], ["dark", "暗金"]].map(([v, l]) => `<button class="chip ${S.settings.theme === v ? "on" : ""}" data-theme-set="${v}">${l}</button>`).join("")}</div></div>
-        <div class="set-row"><span class="k">字号</span><div class="ctl">${[["std", "标准"], ["big", "大字"]].map(([v, l]) => `<button class="chip ${S.settings.font === v ? "on" : ""}" data-font-set="${v}">${l}</button>`).join("")}</div></div>
+        <div class="set-row"><span class="k">字号</span><div class="ctl">${[["std", "标准"], ["big", "大字"], ["xl", "特大"]].map(([v, l]) => `<button class="chip ${S.settings.font === v ? "on" : ""}" data-font-set="${v}">${l}</button>`).join("")}</div></div>
+        <div class="set-row"><span class="k">音效</span><div class="ctl">${[["on", "开"], ["off", "关"]].map(([v, l]) => `<button class="chip ${(S.settings.sound !== false) === (v === "on") ? "on" : ""}" data-sound-set="${v}">${l}</button>`).join("")}<span class="rp-hint" style="margin-left:8px">发现/收藏时的轻响</span></div></div>
       </section>
 
       <section class="card me-sec rv"><h3>♥ 想去 <span class="b-count" style="font-weight:400;font-style:italic;color:var(--brass)">×${favCities.length}</span></h3>
@@ -796,6 +799,10 @@
         return; }
       const fs = e.target.closest("[data-font-set]");
       if (fs) { TR.state.settings.font = fs.dataset.fontSet; TR.applyTheme(); TR.persist(); V.me(root); return; }
+      const ss = e.target.closest("[data-sound-set]");
+      if (ss) { const onv = ss.dataset.soundSet === "on"; TR.state.settings.sound = onv; TR.persist();
+        if (TR.sfx) { TR.sfx.setOn(onv); if (onv) TR.sfx.pick(); }
+        TR.$$("[data-sound-set]", root).forEach((x) => x.classList.toggle("on", x === ss)); return; }
     }); }
     $("#meFrom").addEventListener("click", () => cityPicker(S.settings.from, (id) => {
       S.settings.from = id; $("#meFrom").value = id; TR.persist(); TR.toast("出发地已设为 " + id);

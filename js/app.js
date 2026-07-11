@@ -4,7 +4,7 @@
 
   /* ---------- 状态 ---------- */
   const DEF = {
-    settings: { from: "上海", theme: "auto", font: "std" },
+    settings: { from: "上海", theme: "auto", font: "std", sound: true },
     ctx: { month: TR.monthNow(), days: 3, prefs: ["美食"], scope: "domestic", tier: "中端" },
     favs: [], visited: [], trips: [], notes: {},
   };
@@ -51,13 +51,26 @@
     const f = TR.state.favs, i = f.indexOf(id);
     i >= 0 ? f.splice(i, 1) : f.unshift(id);
     TR.persist();
+    if (i < 0 && TR.sfx) TR.sfx.save();
     TR.toast(i >= 0 ? "已从想去移除" : "已加入想去 ♥");
   };
   TR.toggleVisited = function (id) {
     const v = TR.state.visited, i = v.indexOf(id);
     i >= 0 ? v.splice(i, 1) : v.unshift(id);
     TR.persist();
-    if (i < 0) TR.toast("又点亮一座城 ✓");
+    if (i < 0) { if (TR.sfx) TR.sfx.save(); TR.toast("又点亮一座城 ✓"); }
+  };
+
+  /* 抽一座城：旅行最大的快乐是"发现"——优先当前范围内有深度档案的城，直达档案页 */
+  TR.randomCity = function () {
+    const cities = window.TR_CORE.cities, scope = TR.state.ctx.scope;
+    let pool = cities.filter((c) => (scope === "intl" ? c.intl : !c.intl) && c.hasDeep);
+    if (pool.length < 5) pool = cities.filter((c) => (scope === "intl" ? c.intl : !c.intl));
+    if (!pool.length) pool = cities;
+    const c = pool[Math.floor(Math.random() * pool.length)];
+    if (TR.sfx) TR.sfx.pick();
+    TR.toast("缘分指向 " + c.id + " ✨");
+    TR.router.go("city/" + c.id);
   };
 
   /* 建一份行程：档案页「存进行囊」与行囊页「生成草稿」共用（需 deep 已就绪） */
@@ -85,7 +98,8 @@
     const t = TR.state.settings.theme;
     const dark = t === "dark" || (t === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-    document.body.setAttribute("data-font", TR.state.settings.font === "big" ? "big" : "std");
+    const f = TR.state.settings.font;
+    document.body.setAttribute("data-font", f === "big" || f === "xl" ? f : "std");
   };
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     if (TR.state.settings.theme === "auto") TR.applyTheme();
@@ -95,12 +109,17 @@
   TR.switchTheme = function (mutate, originEl) {
     const wasDark = document.documentElement.getAttribute("data-theme") === "dark";
     const apply = () => { mutate(); TR.applyTheme(); };
-    if (!document.startViewTransition || TR.prefersReducedMotion()) return apply();
+    // 闸门：过渡进行中再点、或不支持/减动画 → 直接瞬切、不叠动画。
+    // 超长档案页上快速连点会堆叠多重 View Transition（各自给整页拍快照）拖垮主线程致卡死，这道闸门根治。
+    if (!document.startViewTransition || TR.prefersReducedMotion() || TR._vtBusy) return apply();
     const el = originEl || document.getElementById("themeBtn");
     const r = el.getBoundingClientRect();
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const R = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)) + 4;  // +4 盖住对角锯齿缝
-    document.startViewTransition(apply).ready.then(() => {
+    TR._vtBusy = true;
+    const vt = document.startViewTransition(apply);
+    vt.finished.finally(() => { TR._vtBusy = false; });
+    vt.ready.then(() => {
       const toDark = document.documentElement.getAttribute("data-theme") === "dark";
       if (toDark === wasDark) return;   // 明暗未翻转（如 auto→同色），跳过圆形动画
       const light = [`circle(0px at ${cx}px ${cy}px)`, `circle(${R}px at ${cx}px ${cy}px)`];
@@ -110,7 +129,7 @@
           easing: toDark ? "cubic-bezier(.4,0,.2,1)" : "cubic-bezier(.22,1,.36,1)",
           fill: "forwards",                                   // 终态保持到过渡拆除，杜绝结束闪帧
           pseudoElement: toDark ? "::view-transition-old(root)" : "::view-transition-new(root)" });
-    });
+    }).catch(() => {});
   };
 
   /* ---------- deep.js 异步加载（script 注入，file:// 可用） ---------- */
@@ -149,8 +168,15 @@
 
   /* ---------- Service Worker（仅 https；file:// 全功能不依赖） ---------- */
   if ("serviceWorker" in navigator && location.protocol === "https:") {
+    const hadController = !!navigator.serviceWorker.controller;
+    let refreshing = false;
+    // 新版 SW 接管后自动刷新一次拿到最新（首访无旧 SW 不刷，避免刷新循环）
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing || !hadController) return;
+      refreshing = true; location.reload();
+    });
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch(() => {});
+      navigator.serviceWorker.register("sw.js").then((reg) => { try { reg.update(); } catch (e) {} }).catch(() => {});
     });
   }
 
@@ -168,6 +194,7 @@
 
   /* ---------- 启动 ---------- */
   TR.applyTheme();
+  if (TR.sfx) TR.sfx.setOn(TR.state.settings.sound !== false);
   if (!location.hash) location.hash = "#/radar";
   dispatch();
   loadDeep();
