@@ -610,7 +610,54 @@ button.item.act:active { transform: scale(.96); }
 .trip-card .t-cd { display: inline-block; margin-left: 8px; font-size: 11.5px; font-weight: 600; color: var(--terra); background: var(--terra-soft); padding: 2px 8px; border-radius: var(--r-pill); vertical-align: middle; }
 .rp-hint { font-size: 11.5px; color: var(--ink-3); }
 
+/* 城市之声：一城一歌 · 黑胶唱片旋转 + 深链正版播放 */
+.city-sound { background: linear-gradient(155deg, var(--terra-soft), var(--surface) 76%); border-color: var(--brass-line); }
+.city-sound > h3 { display: flex; align-items: center; gap: 8px; }
+.cs-body { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
+.cs-disc { flex: none; width: 60px; height: 60px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, var(--brass) 0 11%, #241d18 12% 15%, #2c241d 16% 46%, #1d1712 47% 100%);
+  position: relative; box-shadow: 0 3px 12px rgba(0, 0, 0, .28); animation: spin 6s linear infinite; }
+.cs-disc::after { content: ""; position: absolute; inset: 24px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .07); }
+.cs-needle { position: absolute; top: -4px; right: 3px; width: 3px; height: 30px; background: var(--terra); border-radius: 3px; transform-origin: top center; transform: rotate(20deg); }
+.cs-info { flex: 1; min-width: 0; }
+.cs-song { font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.3; }
+.cs-artist { font-size: 12.5px; color: var(--brass); margin-left: 8px; font-weight: 400; }
+.cs-why { font-size: 13px; color: var(--ink-2); line-height: 1.62; margin: 5px 0 10px; }
+.cs-acts { display: flex; align-items: center; gap: 14px; }
+.cs-alt { font-size: 12.5px; color: var(--brass); text-decoration: none; border-bottom: 1px dotted var(--brass-line); }
+.cs-alt:hover { color: var(--terra); }
+.cs-foot { margin-top: 10px; font-size: 11.5px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 攻略卡：选天数即出逐日游玩指南 */
+.guide-card .guide-ctrl { display: flex; flex-direction: column; gap: 10px; margin: 10px 0 2px; }
+.g-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.g-k { font-size: 12.5px; color: var(--ink-3); flex: none; width: 44px; }
+.g-chips { display: flex; gap: 7px; flex-wrap: wrap; }
+.g-chips .chip { padding: 5px 12px; font-size: 13px; }
+.g-day { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--brass-line); }
+.g-day:first-child { border-top: none; padding-top: 4px; }
+.g-dhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.g-dn { font-family: Georgia, serif; font-style: italic; font-size: 15px; color: var(--terra); font-weight: 600; }
+.g-slots { display: flex; flex-direction: column; gap: 1px; }
+.g-slot { display: flex; align-items: baseline; gap: 10px; padding: 5px 0; font-size: 13.5px; }
+.g-t { flex: none; width: 34px; font-size: 11.5px; color: var(--brass); text-align: right; }
+.g-txt { flex: 1; line-height: 1.52; }
+.g-slot .s-nav { flex: none; }
+.guide-foot { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+/* 「我的」= 旅行手账：红页边 + 装订线，卡片像一页页翻落定案 */
+.me-sec { position: relative; padding-left: 40px; }
+.me-sec::before { content: ""; position: absolute; top: 12px; bottom: 12px; left: 26px; width: 1px; background: rgba(199, 92, 61, .26); }
+.me-sec::after { content: ""; position: absolute; top: 16px; bottom: 16px; left: 14px; width: 3px; border-radius: 3px; background: repeating-linear-gradient(var(--brass) 0 2px, transparent 2px 11px); opacity: .42; }
+@keyframes contourDrift { to { background-position: 48px 34px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .contour { animation: contourDrift 72s ease-in-out infinite alternate; }        /* 等高线极慢漂移，底图像活的 */
+  .me-sec.rv { transform: perspective(1200px) rotateX(8deg) translateY(20px); transform-origin: 50% 0; }
+  .me-sec.rv.in { transform: none; }                                              /* 翻页落定 */
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico,
-  .tabbar a.on i, .chip.on, .chip.on-terra { animation: none !important; }
+  .tabbar a.on i, .chip.on, .chip.on-terra, .cs-disc { animation: none !important; }
 }

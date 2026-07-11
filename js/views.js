@@ -177,13 +177,14 @@
         return hay.includes(kw.toLowerCase());
       });
       $("#cityGrid").innerHTML = list.length ? list.map((c) => `
-        <article class="card hover city-card" data-city="${esc(c.id)}">
+        <article class="card hover city-card" data-city="${esc(c.id)}" data-tilt>
           <h4>${esc(c.id)} ${c.hasDeep ? '<span class="deep-dot" title="有深度档案"></span>' : ""}</h4>
           <p class="prov">${esc(c.province)} · ${esc(c.region)}</p>
           <p class="tl">${esc(c.tagline)}</p>
           <div class="foot"><span class="tag brass">${esc(c.days || "")}</span><span class="tag pine">¥${c.perDay}/天</span>${S.favs.includes(c.id) ? '<span class="tag terra">想去</span>' : ""}${S.visited.includes(c.id) ? '<span class="tag cyan">去过</span>' : ""}</div>
         </article>`).join("")
         : `<div class="empty" style="grid-column:1/-1"><b>没有匹配</b>换个关键词，或清空搜索</div>`;
+      TR.fx.tilt($("#cityGrid"));
     }
     $("#citySearch").addEventListener("input", (e) => { kw = e.target.value.trim(); renderGrid(); });
     $("#regionTabs").addEventListener("click", (e) => {
@@ -343,6 +344,25 @@
     }
     B("note", "笔记", "full", "📝", "我的笔记", "", `<textarea class="note-area" id="cityNote" placeholder="写点什么：想吃的店、朋友的建议、踩过的坑……只保存在你自己的设备里">${esc(S.notes[c.id] || "")}</textarea><span class="note-saved" id="noteSaved">已记下 ✓</span>`);
 
+    // 攻略：选天数/节奏 → 逐日游玩指南（复用 engine.genItinerary；可存进行囊）
+    const defDays = (() => { const m = String(c.days || "").match(/(\d+)/); return m ? TR.clamp(+m[1], 1, 5) : 3; })();
+    const guideCard = `<section class="card block guide-card rv" id="guideCard">
+      <h3><span class="b-ico">🧭</span>怎么玩 · ${esc(c.id)}<span class="b-count">选天数即出攻略</span></h3>
+      <div class="guide-ctrl">
+        <div class="g-row"><span class="g-k">玩几天</span><div class="g-chips" id="gDays">${[1, 2, 3, 4, 5].map((n) => `<button class="chip ${n === defDays ? "on-terra" : ""}" data-d="${n}">${n}天</button>`).join("")}</div></div>
+        <div class="g-row"><span class="g-k">节奏</span><div class="g-chips" id="gPace">${[["slow", "🐢 慢游"], ["std", "🚶 标准"], ["rush", "⚡ 特种兵"]].map(([v, l]) => `<button class="chip ${v === "std" ? "on" : ""}" data-p="${v}">${l}</button>`).join("")}</div></div>
+      </div>
+      <div id="guideOut"></div>
+      <div class="guide-foot"><button class="btn terra sm" id="guideSave">🎒 存进行囊</button><button class="btn ghost sm" id="guideCopy">📋 复制攻略</button></div>
+    </section>`;
+    const guideItin = (days, pace) => {
+      const itin = E().genItinerary(c.id, days, pace);
+      const warn = E().PACE_WARN[pace];
+      return (warn ? `<p class="pace-warn">⚡ ${esc(warn)}</p>` : "") + itin.map((dd) => `
+        <div class="g-day rv"><div class="g-dhead"><span class="g-dn">Day ${dd.day}</span>${dd.tip ? `<span class="d-tip">📌 ${esc(dd.tip)}</span>` : ""}</div>
+        <div class="g-slots">${dd.slots.map((s) => `<div class="g-slot"><span class="g-t">${esc(s.t)}</span><span class="g-txt">${esc(s.icon)} ${esc(s.txt)}</span>${s.nav ? `<a class="s-nav" target="_blank" rel="noopener" href="${amap(s.txt.replace(/^(早餐|午餐|晚餐)：/, ""))}">导航</a>` : ""}</div>`).join("")}</div></div>`).join("");
+    };
+
     body.innerHTML = `
       <section class="profile-hero contour">
         <h1 class="cityname">${esc(c.id)}<small>${esc(c.region)} · ${esc(c.province)}</small></h1>
@@ -354,15 +374,17 @@
           ${c.passport ? `<span class="tag cyan">${esc(c.passport)}</span>` : ""}
         </div>
         <div class="profile-acts">
-          <button class="btn terra" id="genTripBtn">🎒 生成行程草稿</button>
+          <button class="btn terra" id="genTripBtn">🗓 怎么玩这座城</button>
           <a class="btn ghost" target="_blank" rel="noopener" href="${E().amapLink(c.id, c.id)}">🗺 打开高德</a>
         </div>
       </section>
       ${nowCard}
+      <div id="citySoundSlot"></div>
+      ${guideCard}
       ${anchors.length > 3 ? `<nav class="anchor-nav glass" id="anchorNav">${anchors.map((a) => `<button class="chip" data-anchor="${a.aid}">${esc(a.aname)}</button>`).join("")}</nav>` : ""}
       <div class="bento">${blocks.join("")}</div>`;
 
-    $("#genTripBtn").addEventListener("click", () => { TR.state.planPrefill = c.id; TR.router.go("plan"); });
+    $("#genTripBtn").addEventListener("click", () => { const g = $("#guideCard", body); if (g) g.scrollIntoView({ behavior: "smooth", block: "start" }); });
     let noteTimer;
     $("#cityNote").addEventListener("input", (e) => {
       clearTimeout(noteTimer);
@@ -408,6 +430,32 @@
         }
       }, { rootMargin: "-30% 0px -60% 0px" });
       anchors.forEach((a) => { const el = $("#a-" + a.aid); if (el) spy.observe(el); });
+    }
+    // 城市之声（DOM 就绪后注入一城一歌卡片；模块缺席则无副作用）
+    if (window.TR && TR.sound) { const _cs = $("#citySoundSlot", body); if (_cs) _cs.appendChild(TR.sound.card(c)); }
+    // 攻略卡：选天数/节奏即出逐日游玩指南
+    const gc = $("#guideCard", body);
+    if (gc) {
+      let gDays = defDays, gPace = "std";
+      const paint = () => { const out = $("#guideOut", gc); out.innerHTML = guideItin(gDays, gPace); TR.fx.reveal(out); };
+      gc.addEventListener("click", (e) => {
+        const db = e.target.closest("[data-d]");
+        if (db) { gDays = +db.dataset.d; $$("#gDays .chip", gc).forEach((x) => x.classList.toggle("on-terra", +x.dataset.d === gDays)); paint(); return; }
+        const pb = e.target.closest("[data-p]");
+        if (pb) { gPace = pb.dataset.p; $$("#gPace .chip", gc).forEach((x) => x.classList.toggle("on", x.dataset.p === gPace)); paint(); return; }
+        if (e.target.closest("#guideSave")) {
+          const trip = TR.createTrip(c.id, gDays, S.ctx.month, gPace, "");
+          S.trips.unshift(trip); TR.persist(); TR.toast("已存进行囊 🎒"); TR.router.go("plan/" + trip.id); return;
+        }
+        if (e.target.closest("#guideCopy")) {
+          const itin = E().genItinerary(c.id, gDays, gPace);
+          const pn = gPace === "slow" ? "慢游" : gPace === "rush" ? "特种兵" : "标准";
+          const txt = `${c.id} · ${gDays}天（${pn}）\n` + itin.map((dd) => `Day ${dd.day}\n` + dd.slots.map((s) => `  ${s.t} ${s.txt}`).join("\n")).join("\n") + `\n—— 旅行雷达`;
+          (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => TR.toast("攻略已复制，粘到备忘录或发朋友"), () => TR.toast("复制失败，长按手动选"));
+          return;
+        }
+      });
+      paint();
     }
     // M1 订票深链 + M3「分享这座城」按钮（DOM 就绪后注入；模块缺席则无副作用）
     if (window.TR && TR.biz) { const _bs = $("#bizGoLinks", body); if (_bs) TR.biz.renderLinks(_bs, c); }
@@ -533,16 +581,9 @@
     $("#createTrip").addEventListener("click", () => {
       const cityId = $("#tripCity").value.trim();
       if (!cityById(cityId)) { TR.toast("先选一个有效的目的地城市"); return; }
-      const month = +$("#tripMonth").value;
-      const trip = {
-        id: "t" + Date.now().toString(36),
-        city: cityId, days, month, pace,
-        date: $("#tripDate").value || "",
-        created: new Date().toLocaleDateString("zh-CN"),
-        itin: null, packDone: {},
-      };
+      const month = +$("#tripMonth").value, date = $("#tripDate").value || "";
       TR.whenDeep(() => {
-        trip.itin = E().genItinerary(cityId, days, pace);
+        const trip = TR.createTrip(cityId, days, month, pace, date);
         S.trips.unshift(trip);
         TR.persist();
         TR.router.go("plan/" + trip.id);
@@ -702,12 +743,12 @@
       </section>
 
       <section class="card me-sec rv"><h3>♥ 想去 <span class="b-count" style="font-weight:400;font-style:italic;color:var(--brass)">×${favCities.length}</span></h3>
-        ${favCities.length ? `<div class="fav-grid">${favCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}"><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
+        ${favCities.length ? `<div class="fav-grid">${favCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}" data-tilt><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
         : `<div class="empty"><b>还没收藏</b>在雷达或档案页点「想去 ♡」</div>`}
       </section>
 
       <section class="card me-sec rv"><h3>✓ 去过 <span class="b-count" style="font-weight:400;font-style:italic;color:var(--brass)">×${visitedCities.length}</span></h3>
-        ${visitedCities.length ? `<div class="fav-grid">${visitedCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}"><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
+        ${visitedCities.length ? `<div class="fav-grid">${visitedCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}" data-tilt><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
         : `<div class="empty"><b>足迹待点亮</b>去过的城市在档案页标记，慢慢攒一张自己的地图</div>`}
       </section>
 
@@ -747,7 +788,11 @@
       const tier = e.target.closest("[data-tier]");
       if (tier) { TR.state.ctx.tier = tier.dataset.tier; TR.persist(); V.me(root); return; }
       const th = e.target.closest("[data-theme-set]");
-      if (th) { const set = th.dataset.themeSet; TR.switchTheme(() => { TR.state.settings.theme = set; TR.persist(); V.me(root); }, th); return; }
+      if (th) { const set = th.dataset.themeSet;
+        // 只原地切激活态，别在过渡回调里整页重渲——否则新截图是「未揭示」的半空白页，擦除结束会闪跳
+        TR.switchTheme(() => { TR.state.settings.theme = set; TR.persist(); }, th);
+        TR.$$("[data-theme-set]", root).forEach((x) => x.classList.toggle("on", x === th));
+        return; }
       const fs = e.target.closest("[data-font-set]");
       if (fs) { TR.state.settings.font = fs.dataset.fontSet; TR.applyTheme(); TR.persist(); V.me(root); return; }
     }); }
@@ -783,6 +828,6 @@
     });
     // M1 合规页脚（配置为空时仅一行中性披露，无外联）
     if (window.TR && TR.biz) TR.biz.renderFooterDisclosure(root);
-    TR.fx.reveal(root);
+    TR.fx.reveal(root); TR.fx.tilt(root);
   };
 })(window.TR);

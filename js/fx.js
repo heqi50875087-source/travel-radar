@@ -153,6 +153,24 @@
       const hot = cssVar("--fx-hot") || "#C75C3D";
       ctx.clearRect(0, 0, W, H);
       const tt = reduced() ? 0 : (ts - t0) / 1000;
+      // 航线弧：从出发地画一条会飞的虚线到 hover 的城（替代 3D 地球仪，雷达叙事更强）
+      if (hoverIdx >= 0 && pts[hoverIdx]) {
+        const fromId = (TR.state && TR.state.settings && TR.state.settings.from) || "上海";
+        const fco = C[fromId], hp = pts[hoverIdx];
+        if (fco && fromId !== hp.c.id) {
+          const [fx, fy] = project(fco.lat, fco.lng, W, H);
+          const dx = hp.x - fx, dy = hp.y - fy, nrm = Math.hypot(dx, dy) || 1;
+          const lift = Math.min(nrm * 0.26, 96 * DPR);
+          const cxp = (fx + hp.x) / 2 - (dy / nrm) * lift, cyp = (fy + hp.y) / 2 + (dx / nrm) * lift;
+          ctx.save();
+          ctx.strokeStyle = hot; ctx.globalAlpha = 0.5; ctx.lineWidth = 1.3 * DPR;
+          ctx.setLineDash([6 * DPR, 6 * DPR]); ctx.lineDashOffset = -tt * 34 * DPR;   // 相位推进=航线在飞
+          ctx.beginPath(); ctx.moveTo(fx, fy); ctx.quadraticCurveTo(cxp, cyp, hp.x, hp.y); ctx.stroke();
+          ctx.setLineDash([]); ctx.globalAlpha = 0.85; ctx.fillStyle = hot;             // 出发地锚点
+          ctx.beginPath(); ctx.arc(fx, fy, 3 * DPR, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        }
+      }
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i];
         const tw = 0.5 + 0.5 * Math.sin(tt * 1.4 + i * 1.7);

@@ -1,5 +1,5 @@
 /* 旅行雷达 Service Worker · 离线可用 */
-const VERSION = "tr-v8";
+const VERSION = "tr-v9";
 const SHELL = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const SHELL = [
   "./js/biz.js",
   "./js/biz-gear.js",
   "./js/share.js",
+  "./js/city-sound.js",
   "./js/util.js",
   "./js/engine.js",
   "./js/fx.js",

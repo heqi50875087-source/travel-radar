@@ -219,5 +219,35 @@ ok(E.PREFS.length === 16, "16 偏好胶囊");
   console.log('✓ 商业化 M3 断言 ×6 全部通过');
 })();
 
+/* ===== 城市之声断言（×8） ===== */
+(function () {
+  const assert = require('assert');
+  const path = require('path');
+  const ROOT = path.join(__dirname, '..');
+  const snd = require(path.join(ROOT, 'js', 'city-sound.js'));
+  const byId = (id) => CORE.cities.find((c) => c.id === id);
+
+  const cd = snd.pick(byId('成都'));
+  assert(cd.song === '成都' && cd.artist === '赵雷' && !cd.fallback, 'CS-01 成都签名曲=赵雷《成都》');
+  assert(/^https:\/\/music\.163\.com\/#\/search\/m\/\?s=/.test(cd.netease)
+    && cd.netease.includes(encodeURIComponent('成都 赵雷'))
+    && !/[?&]id=\d/.test(cd.netease), 'CS-02 网易云深链为词搜、无硬编码 songId');
+  assert(/^https:\/\/y\.qq\.com\//.test(cd.qq), 'CS-03 QQ 音乐深链 https');
+
+  assert(snd.moodOf(byId('北海')) === '海滨', 'CS-04 mood 启发式：北海→海滨');
+  const noSig = snd.pick(byId('丽水'));
+  assert(noSig.fallback === true && noSig.song, 'CS-05 无签名曲城市按 mood 兜底且有歌');
+
+  assert(snd.ANTHEM.artist === '陈绮贞' && snd.ANTHEM.song === '旅行的意义', 'CS-06 主题曲=陈绮贞《旅行的意义》');
+
+  const moodSongs = Object.keys(snd.MOOD).map((k) => snd.MOOD[k].song);
+  assert(!moodSongs.includes('青藏高原') && !moodSongs.includes('沙漠骆驼'),
+    'CS-07 mood 兜底曲不含地理专属曲（防丽水配西藏歌）');
+  assert(['雄伟','苍凉','海滨','高雅','市井','轻松'].every((m) => snd.MOOD[m] && snd.MOOD[m].song),
+    'CS-08 六种气质均有兜底曲');
+
+  console.log('✓ 城市之声断言 ×8 全部通过');
+})();
+
 console.log(fail === 0 ? `\n✅ 自检通过 ${n}/${n}` : `\n❌ ${fail}/${n} 未过`);
 process.exit(fail ? 1 : 0);
