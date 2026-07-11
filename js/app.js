@@ -23,7 +23,7 @@
     TR.store.set("ctx", S.ctx);
     TR.store.set("favs", S.favs);
     TR.store.set("visited", S.visited);
-    TR.store.set("trips", S.trips.map((t) => { const { _tab, _swapSeed, ...rest } = t; return rest; }));
+    TR.store.set("trips", S.trips.map((t) => { const { _tab, _swapSeed, _fresh, ...rest } = t; return rest; }));
     TR.store.set("notes", S.notes);
   };
   TR.exportState = () => ({
@@ -79,7 +79,7 @@
       id: "t" + Date.now().toString(36),
       city: cityId, days: days, month: month, pace: pace,
       date: date || "", created: new Date().toLocaleDateString("zh-CN"),
-      itin: TR.engine.genItinerary(cityId, days, pace), packDone: {},
+      itin: TR.engine.genItinerary(cityId, days, pace), packDone: {}, _fresh: true,
     };
   };
 
@@ -199,4 +199,10 @@
   dispatch();
   loadDeep();
   installHint();
+  // E1 季节角标：底栏「雷达」按当前月出一枚小节气（3-5🌸 6-8🍃 9-11🍂 12-2❄）
+  (function () {
+    const m = TR.monthNow(), e = m >= 3 && m <= 5 ? "🌸" : m >= 6 && m <= 8 ? "🍃" : m >= 9 && m <= 11 ? "🍂" : "❄️";
+    const lab = document.querySelector('.tabbar a[data-nav="radar"] span');
+    if (lab && !lab.querySelector(".season-badge")) { const s = document.createElement("sup"); s.className = "season-badge"; s.textContent = e; s.setAttribute("aria-hidden", "true"); lab.appendChild(s); }
+  })();
 })(window.TR);

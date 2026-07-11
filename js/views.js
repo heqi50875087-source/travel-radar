@@ -367,6 +367,8 @@
 
     body.innerHTML = `
       <section class="profile-hero contour">
+        <canvas class="hero-particles" id="heroParticles" aria-hidden="true"></canvas>
+        <span class="seal" aria-hidden="true">${esc(c.id[0])}</span>
         <h1 class="cityname">${esc(c.id)}<small>${esc(c.region)} · ${esc(c.province)}</small></h1>
         <p class="tagline">${esc(c.tagline)}</p>
         <div class="profile-meta">
@@ -433,6 +435,8 @@
       }, { rootMargin: "-30% 0px -60% 0px" });
       anchors.forEach((a) => { const el = $("#a-" + a.aid); if (el) spy.observe(el); });
     }
+    // hero 季节物候粒子（小 canvas · 离屏停表）
+    if (TR.fx && TR.fx.seasonParticles) { const _hp = $("#heroParticles", body); if (_hp) TR.fx.seasonParticles(_hp); }
     // 城市之声（DOM 就绪后注入一城一歌卡片；模块缺席则无副作用）
     if (window.TR && TR.sound) { const _cs = $("#citySoundSlot", body); if (_cs) _cs.appendChild(TR.sound.card(c)); }
     // 攻略卡：选天数/节奏即出逐日游玩指南
@@ -569,7 +573,7 @@
         return `<article class="card hover trip-card" data-trip="${t.id}">
           <div><div class="t-city">${esc(t.city)}${cd ? `<span class="t-cd">${cd}</span>` : ""}</div><div class="t-meta">${t.month}月 · ${t.days} 天 · ${t.pace === "slow" ? "慢游" : t.pace === "rush" ? "特种兵" : "标准"} · 建于 ${esc(t.created)}</div></div>
           <span class="t-go">→</span>
-        </article>`; }).join("") : `<div class="empty"><b>还没有行程</b>上面选个城市，10 秒生成一份草稿</div>`}
+        </article>`; }).join("") : `<div class="empty"><span class="empty-ico bob" aria-hidden="true">🎒</span><b>还没有行程</b>上面选个城市，10 秒生成一份草稿</div>`}
       </div>`;
 
     let days = 3, pace = "std";
@@ -624,12 +628,12 @@
     } else if (tab === "budget") {
       const b = E().calcBudget(trip.city, S.ctx.tier, trip.days);
       if (b.rough) {
-        inner = `<div class="budget-box card"><div class="budget-total">¥${b.total.toLocaleString()}<small>${trip.days} 天粗估 · 人均 ¥${b.perDay}/天</small></div><p class="desc" style="margin-top:10px">这座城市没有分项预算预设，按基础卡人均估算。</p></div>`;
+        inner = `<div class="budget-box card"><div class="budget-total">¥<span class="cnum" data-to="${b.total}">0</span><small>${trip.days} 天粗估 · 人均 ¥${b.perDay}/天</small></div><p class="desc" style="margin-top:10px">这座城市没有分项预算预设，按基础卡人均估算。</p></div>`;
       } else {
         const total = b.breakdown.reduce((s, x) => s + x.v, 0);
         const max = Math.max(...b.breakdown.map((x) => x.v));
         inner = `<div class="budget-box card">
-          <div class="budget-total">¥${total.toLocaleString()}<small>${S.ctx.tier}档 · ${trip.days} 天总预算</small></div>
+          <div class="budget-total">¥<span class="cnum" data-to="${total}">0</span><small>${S.ctx.tier}档 · ${trip.days} 天总预算</small></div>
           <div class="b-bars">${b.breakdown.map((x) => `
             <div class="b-bar"><span class="k">${esc(x.icon)} ${esc(x.k)}</span><div class="track"><div class="fill" style="width:${Math.round((x.v / max) * 100)}%"></div></div><span class="v">¥${x.v.toLocaleString()}</span></div>`).join("")}
           </div>
@@ -724,6 +728,8 @@
     // M1 行程→订单卡（仅行程 tab） + M2 装备清单「购」按钮（仅装备 tab）
     if (tab === "itin" && window.TR && TR.biz) TR.biz.tripCard($("#tripInner", root), [c], { from: S.settings.from });
     if (tab === "pack" && window.TR && TR.biz) TR.biz.decorateGearList($("#tripInner", root), { itemSelector: ".pack-item" });
+    if (tab === "budget") TR.$$(".cnum", root).forEach((el) => TR.fx.countUp(el, +el.dataset.to));
+    if (trip._fresh) { delete trip._fresh; if (TR.fx.paperPlane) TR.fx.paperPlane(root); }
     TR.fx.reveal(root);
   }
 
@@ -747,12 +753,12 @@
 
       <section class="card me-sec rv"><h3>♥ 想去 <span class="b-count" style="font-weight:400;font-style:italic;color:var(--brass)">×${favCities.length}</span></h3>
         ${favCities.length ? `<div class="fav-grid">${favCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}" data-tilt><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
-        : `<div class="empty"><b>还没收藏</b>在雷达或档案页点「想去 ♡」</div>`}
+        : `<div class="empty"><span class="empty-ico bob" aria-hidden="true">🤍</span><b>还没收藏</b>在雷达或档案页点「想去 ♡」</div>`}
       </section>
 
       <section class="card me-sec rv"><h3>✓ 去过 <span class="b-count" style="font-weight:400;font-style:italic;color:var(--brass)">×${visitedCities.length}</span></h3>
         ${visitedCities.length ? `<div class="fav-grid">${visitedCities.map((c) => `<article class="card hover mini-card" data-city="${esc(c.id)}" data-tilt><h4>${esc(c.id)}</h4><p class="prov">${esc(c.province)}</p></article>`).join("")}</div>`
-        : `<div class="empty"><b>足迹待点亮</b>去过的城市在档案页标记，慢慢攒一张自己的地图</div>`}
+        : `<div class="empty"><span class="empty-ico bob" aria-hidden="true">🗺️</span><b>足迹待点亮</b>去过的城市在档案页标记，慢慢攒一张自己的地图</div>`}
       </section>
 
       ${noteCities.length ? `<section class="card me-sec rv"><h3>📝 我的笔记</h3><div class="list-rows">

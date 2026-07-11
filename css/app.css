@@ -452,7 +452,7 @@ input.field:focus, select.field:focus, textarea.field:focus { outline: none; bor
 .b-bar { display: grid; grid-template-columns: 92px 1fr 74px; align-items: center; gap: 10px; font-size: 13px; }
 .b-bar .k { color: var(--ink-2); }
 .b-bar .track { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
-.b-bar .fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--pine), var(--brass)); transition: width .8s var(--ease-out); }
+.b-bar .fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--pine), var(--brass)); transition: width .8s var(--ease-out); transform-origin: left center; }
 .b-bar .v { text-align: right; font-family: Georgia, serif; color: var(--ink-2); }
 
 /* 装备 */
@@ -655,14 +655,54 @@ button.item.act:active { transform: scale(.96); }
 .theme-song a { color: var(--terra); border-bottom: 1px dashed var(--terra); text-decoration: none; }
 .dice-btn { margin-top: 22px; border-style: dashed; letter-spacing: .02em; }
 .dice-btn:hover { border-color: var(--terra); color: var(--terra); }
+
+/* ══ 惊喜层（Fable 菜单）══ */
+/* A1 城市朱印：hero 右上角一枚朱文印，进页"啪"地盖下 */
+.profile-hero { position: relative; }
+.hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }  /* F1 物候粒子层 */
+.profile-hero > *:not(.hero-particles):not(.seal) { position: relative; z-index: 1; }
+.seal { position: absolute; top: 18px; right: 2px; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center;
+  font-family: var(--serif); font-size: 23px; font-weight: 700; color: var(--terra); background: transparent;
+  border: 2px solid var(--terra); border-radius: 9px; box-shadow: inset 0 0 0 1px var(--terra); transform: rotate(-6deg); opacity: .88; pointer-events: none; }
+@keyframes sealStamp { 0% { transform: rotate(-6deg) scale(1.7); opacity: 0; } 55% { opacity: 1; } 100% { transform: rotate(-6deg) scale(1); opacity: .88; } }
+
+/* A2 区块标题墨线：卡进视口时从左"拉"出（骑现有 reveal 的 .in） */
+.block > h3 { position: relative; }
+.block > h3::after { content: ""; position: absolute; left: 0; bottom: -5px; height: 1px; width: 0; background: var(--brass-line); transition: width .6s var(--ease-out) .12s; }
+.block.in > h3::after { width: 100%; }
+
+/* A3 条目墨晕：按下从底部渗墨又收干 */
+button.item.act { position: relative; overflow: hidden; }
+button.item.act::after { content: ""; position: absolute; left: 50%; bottom: -32%; width: 150%; aspect-ratio: 1; border-radius: 50%; transform: translateX(-50%) scale(.3); opacity: 0; pointer-events: none;
+  background: radial-gradient(circle, var(--terra-soft), transparent 66%); }
+button.item.act:active::after { opacity: .9; transform: translateX(-50%) scale(1); transition: opacity .04s, transform .38s var(--ease-out); }
+
+/* B1 阅读航迹线：锚点导航底边随阅读进度伸长（scroll-driven，无 JS；不支持则不出现） */
+@supports (animation-timeline: scroll()) {
+  .anchor-nav::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; transform-origin: left; transform: scaleX(0);
+    background: repeating-linear-gradient(90deg, var(--terra) 0 5px, transparent 5px 9px); animation: trackScroll linear both; animation-timeline: scroll(root block); }
+}
+@keyframes trackScroll { to { transform: scaleX(1); } }
+
+/* D1 纸飞机 + E1 季节角标 */
+.plane-fly { position: fixed; z-index: 60; font-size: 26px; pointer-events: none; will-change: transform; }
+.season-badge { font-size: 10px; vertical-align: super; margin-left: 1px; opacity: .9; }
+.empty-ico { display: block; font-size: 30px; margin: 0 auto 8px; width: max-content; }
+.empty-ico.bob { animation: bobSoft 3s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .seal { animation: sealStamp .4s cubic-bezier(.3, 1.5, .5, 1) both; }
+}
 @keyframes contourDrift { to { background-position: 48px 34px; } }
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: no-preference) {
   .contour { animation: contourDrift 72s ease-in-out infinite alternate; }        /* 等高线极慢漂移，底图像活的 */
   .me-sec.rv { transform: perspective(1200px) rotateX(8deg) translateY(20px); transform-origin: 50% 0; }
   .me-sec.rv.in { transform: none; }                                              /* 翻页落定 */
+  .b-bar .fill { animation: barGrow .7s var(--ease-out) both; }                    /* 预算条从左生长 */
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico,
-  .tabbar a.on i, .chip.on, .chip.on-terra, .cs-disc { animation: none !important; }
+  .tabbar a.on i, .chip.on, .chip.on-terra, .cs-disc, .empty-ico.bob, .seal { animation: none !important; }
 }

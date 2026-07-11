@@ -116,6 +116,71 @@
     if (reduced()) { running = true; frame(100); running = false; } // 静态一帧
   };
 
+  /* ---------- 档案页 hero 季节物候粒子（小 canvas · IO 门控 · 25fps · 暗色化作星子） ---------- */
+  FX.seasonParticles = function (canvas) {
+    if (!canvas || canvas._spOn) return;
+    canvas._spOn = true;
+    const ctx = canvas.getContext("2d");
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    const m = TR.monthNow();
+    const season = m >= 3 && m <= 5 ? "petal" : m >= 6 && m <= 8 ? "firefly" : m >= 9 && m <= 11 ? "leaf" : "snow";
+    let parts = [], raf = null, running = false, last = 0, w = 0, h = 0;
+    const dark = () => document.documentElement.getAttribute("data-theme") === "dark";
+    function size() {
+      if (!canvas.isConnected) { window.removeEventListener("resize", size); return; }
+      const r = canvas.getBoundingClientRect();
+      w = canvas.width = Math.max(1, r.width * DPR); h = canvas.height = Math.max(1, r.height * DPR);
+      if (!parts.length) for (let i = 0; i < 9; i++) parts.push({
+        x: Math.random() * w, y: Math.random() * h,
+        r: (season === "snow" ? 2 : season === "firefly" ? 1.7 : 3) * DPR * (0.6 + Math.random()),
+        vy: (season === "firefly" ? 0.05 : 0.2) * DPR * (0.6 + Math.random()),
+        vx: (Math.random() - 0.5) * 0.25 * DPR, a: Math.random() * 6.28, sway: 0.4 + Math.random(), ph: Math.random() * 6,
+      });
+    }
+    function frame(ts) {
+      if (!running) return;
+      if (!canvas.isConnected) { running = false; return; }
+      if (ts - last < 40) { raf = requestAnimationFrame(frame); return; }   // ~25fps 够
+      last = ts;
+      ctx.clearRect(0, 0, w, h);
+      const isDark = dark(), t = ts / 1000;
+      const brass = cssVar("--brass") || "#B08A4F", terra = cssVar("--fx-hot") || "#C75C3D", soft = cssVar("--ink-3") || "#8a8178";
+      for (const p of parts) {
+        if (!reduced()) {
+          p.y += p.vy; p.x += p.vx + Math.sin(t * p.sway + p.ph) * 0.3 * DPR; p.a += 0.012;
+          if (p.y > h + 12) { p.y = -12; p.x = Math.random() * w; }
+          if (p.x < -12) p.x = w + 12; else if (p.x > w + 12) p.x = -12;
+        }
+        const shape = isDark ? "star" : season;
+        ctx.save(); ctx.translate(p.x, p.y);
+        if (shape === "firefly" || shape === "star") {
+          const gl = 0.5 + 0.5 * Math.sin(t * 2 + p.ph);
+          ctx.globalAlpha = (isDark ? 0.5 : 0.68) * (0.4 + gl * 0.6);
+          ctx.fillStyle = isDark ? brass : terra;
+          ctx.beginPath(); ctx.arc(0, 0, p.r * (0.8 + gl * 0.5), 0, 6.28); ctx.fill();
+        } else if (shape === "snow") {
+          ctx.globalAlpha = 0.5; ctx.fillStyle = soft;
+          ctx.beginPath(); ctx.arc(0, 0, p.r, 0, 6.28); ctx.fill();
+        } else {                                   // petal / leaf：小椭圆瓣
+          ctx.rotate(p.a); ctx.globalAlpha = 0.46; ctx.fillStyle = season === "petal" ? terra : brass;
+          ctx.beginPath(); ctx.ellipse(0, 0, p.r * 1.6, p.r * 0.7, 0, 0, 6.28); ctx.fill();
+        }
+        ctx.restore();
+      }
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    }
+    size();
+    window.addEventListener("resize", size);
+    new IntersectionObserver((ents) => {
+      for (const en of ents) {
+        if (en.isIntersecting && !running) { running = true; raf = requestAnimationFrame(frame); }
+        else if (!en.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
+      }
+    }, { threshold: 0.02 }).observe(canvas);
+    if (reduced()) { running = true; frame(1000); running = false; }   // 静态一帧
+  };
+
   /* ---------- 地图星座 canvas（探索页：全部城市坐标点亮） ---------- */
   FX.constellation = function (canvas, cities, onPick) {
     if (!canvas || canvas._constOn) return;
@@ -236,12 +301,30 @@
 
   /* ---------- 数字滚动 ---------- */
   FX.countUp = function (el, to, dur) {
-    if (reduced()) { el.textContent = to; return; }
+    if (reduced()) { el.textContent = to.toLocaleString(); return; }
     const t0 = performance.now();
     (function step(ts) {
       const p = Math.min(1, (ts - t0) / (dur || 700));
-      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString();
       if (p < 1) requestAnimationFrame(step);
     })(t0);
+  };
+
+  /* 纸飞机：新行程"到达"行囊时沿弧线滑入落定（一次性 WAAPI，无长页负担） */
+  FX.paperPlane = function (root) {
+    if (reduced()) return;
+    const target = (root && root.querySelector(".sec-head")) || document.body;
+    const r = target.getBoundingClientRect();
+    const el = document.createElement("div");
+    el.className = "plane-fly"; el.textContent = "✈️"; el.setAttribute("aria-hidden", "true");
+    document.body.appendChild(el);
+    const ex = Math.max(24, r.left + 18), ey = r.top + r.height / 2, sx = -60, sy = ey - 130;
+    const anim = el.animate([
+      { transform: `translate(${sx}px,${sy}px) rotate(24deg)`, opacity: 0 },
+      { transform: `translate(${(sx + ex) / 2}px,${sy - 16}px) rotate(6deg)`, opacity: 1, offset: .5 },
+      { transform: `translate(${ex}px,${ey}px) rotate(-6deg)`, opacity: 1, offset: .88 },
+      { transform: `translate(${ex}px,${ey}px) rotate(0)`, opacity: 0 },
+    ], { duration: 920, easing: "cubic-bezier(.4,0,.2,1)" });
+    anim.onfinish = anim.oncancel = () => el.remove();
   };
 })(window.TR);
