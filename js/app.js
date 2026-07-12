@@ -58,7 +58,10 @@
     const v = TR.state.visited, i = v.indexOf(id);
     i >= 0 ? v.splice(i, 1) : v.unshift(id);
     TR.persist();
-    if (i < 0) { if (TR.sfx) TR.sfx.save(); TR.toast("又点亮一座城 ✓"); }
+    if (i < 0) {
+      if (TR.fx && TR.fx.stamp) { const d = new Date(), mm = String(d.getMonth() + 1).padStart(2, "0"), dd = String(d.getDate()).padStart(2, "0"); TR.fx.stamp({ text: id, sub: "打卡 · " + mm + "." + dd, flyTo: "me" }); }
+      else { if (TR.sfx) TR.sfx.save(); TR.toast("又点亮一座城 ✓"); }
+    }
   };
 
   /* 抽一座城：旅行最大的快乐是"发现"——优先当前范围内有深度档案的城，直达档案页 */
@@ -163,7 +166,9 @@
   /* ---------- 主题按钮 ---------- */
   TR.$("#themeBtn").addEventListener("click", (e) => {
     const cur = document.documentElement.getAttribute("data-theme");
-    TR.switchTheme(() => { TR.state.settings.theme = cur === "dark" ? "light" : "dark"; TR.persist(); }, e.currentTarget);
+    const toDark = cur !== "dark";
+    if (TR.fx && TR.fx.lightCeremony) TR.fx.lightCeremony(e.currentTarget, toDark);   // 点灯仪式：日落月升+星子
+    TR.switchTheme(() => { TR.state.settings.theme = toDark ? "dark" : "light"; TR.persist(); }, e.currentTarget);
   });
 
   /* ---------- Service Worker（仅 https；file:// 全功能不依赖） ---------- */

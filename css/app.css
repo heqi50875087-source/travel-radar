@@ -660,7 +660,7 @@ button.item.act:active { transform: scale(.96); }
 /* A1 城市朱印：hero 右上角一枚朱文印，进页"啪"地盖下 */
 .profile-hero { position: relative; }
 .hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }  /* F1 物候粒子层 */
-.profile-hero > *:not(.hero-particles):not(.seal) { position: relative; z-index: 1; }
+.profile-hero > *:not(.hero-particles):not(.seal):not(.diorama) { position: relative; z-index: 1; }
 .seal { position: absolute; top: 18px; right: 2px; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center;
   font-family: var(--serif); font-size: 23px; font-weight: 700; color: var(--terra); background: transparent;
   border: 2px solid var(--terra); border-radius: 9px; box-shadow: inset 0 0 0 1px var(--terra); transform: rotate(-6deg); opacity: .88; pointer-events: none; }
@@ -706,3 +706,75 @@ button.item.act:active::after { opacity: .9; transform: translateX(-50%) scale(1
   .ping::after, .item.bob, .m-cell.now::before, .block.in .b-ico, .pheno:hover .p-ico,
   .tabbar a.on i, .chip.on, .chip.on-terra, .cs-disc, .empty-ico.bob, .seal { animation: none !important; }
 }
+
+/* ══════════════════════════════════════════════════════
+   大惊喜层 · 面上的 3D / 昼夜 / 盖章（Fable 设计菜单 v1）
+   守则：零依赖 · 离线可跑 · 只碰 transform/opacity/clip-path · reduce-motion 全降级
+   ══════════════════════════════════════════════════════ */
+
+/* P0-1 点灯仪式：日落月升 + 星子扎眼（fx.lightCeremony 注入的一次性天体层，叠在 switchTheme 圆形擦除之上） */
+.sky-ceremony { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.sky-ceremony .cel { position: absolute; left: 0; top: 0; width: 68px; height: 68px; border-radius: 50%; will-change: transform, opacity; }
+.sky-ceremony .cel.sun { background: radial-gradient(circle at 38% 38%, #FFEDB0, #F5A623 66%, #E07B2C); box-shadow: 0 0 64px 14px rgba(245, 166, 35, .45); }
+.sky-ceremony .cel.moon { background: radial-gradient(circle at 40% 36%, #FBF7EC, #DADEEA 64%, #AFB6C9); box-shadow: 0 0 46px 10px rgba(200, 212, 236, .38); }
+.sky-ceremony .stars { position: absolute; left: 0; top: 0; width: 2.5px; height: 2.5px; border-radius: 50%; background: #FDF7E3; }
+
+/* P0-3 过关盖章：屏幕中央砸下的朱印 + 墨渍迸溅 */
+.stamp-stage { position: fixed; inset: 0; z-index: 75; pointer-events: none; }
+.stamp { position: absolute; left: 50%; top: 43%; width: min(44vmin, 250px); aspect-ratio: 1;
+  display: grid; place-items: center; align-content: center; gap: 4px; color: var(--terra);
+  border: 4px solid var(--terra); border-radius: 20px; box-shadow: inset 0 0 0 2px var(--terra);
+  background: radial-gradient(circle, rgba(199, 92, 61, .07), transparent 70%); will-change: transform, opacity; }
+.stamp .s-main { font-family: var(--serif); font-weight: 900; font-size: min(11vmin, 56px); line-height: 1.05; letter-spacing: .04em; max-width: 88%; text-align: center; word-break: keep-all; }
+.stamp .s-sub { font-family: var(--serif); font-size: min(3.6vmin, 18px); letter-spacing: .26em; opacity: .92; }
+.stamp.still { transform: translate(-50%, -50%); }
+.stamp-stage .splat { position: absolute; left: 50%; top: 43%; width: 15px; height: 15px; border-radius: 50%; background: var(--terra); opacity: 0; will-change: transform, opacity; }
+.tabbar a.badge-pop i { animation: badgePop .5s var(--ease-out); }
+.topnav a.badge-pop { animation: badgePop .5s var(--ease-out); }
+@keyframes badgePop { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-5px) scale(1.3); } 100% { transform: translateY(-1px) scale(1); } }
+
+/* P0-2 立体书城池：档案页 hero 的无图视觉主角（程序化纸雕地平线，翻立 + 指针视差） */
+.profile-hero { perspective: 1000px; }
+/* 不在 .diorama 上设 overflow——非 visible 的 overflow 会强制 transform-style 退回 flat、杀死 translateZ 景深；裁剪交给 .profile-hero 自身的 overflow:hidden */
+.diorama { position: absolute; inset: 0; z-index: 0; transform-style: preserve-3d; pointer-events: none; --px: 0; }
+.diorama::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, transparent 30%, var(--dio-sky, var(--brass)) 112%); opacity: .46; }
+.diorama .dio-l { position: absolute; inset: 0; color: var(--ink); transform-origin: 50% 100%; transform: translateZ(var(--z, 0px)) translateX(calc(var(--px) * var(--par, 0px))); will-change: transform; }
+.diorama .dio-l svg { position: absolute; bottom: 0; left: -8%; width: 116%; height: 100%; display: block; }
+.diorama .dio-l.l0 { --z: -95px; --par: 10px; opacity: .42; color: var(--dio-sky, var(--brass)); }   /* 远山用城市签名色，拉开与近山的色差 */
+.diorama .dio-l.l1 { --z: -38px; --par: 22px; opacity: .5; }
+.diorama .dio-l.l2 { --z: 12px; --par: 40px; opacity: .72; }   /* 近山收一档，浅色主题下不压成实心黑、给 hero 下半留空气 */
+.diorama .dio-sun { position: absolute; width: 58px; height: 58px; border-radius: 50%; right: 15%; top: 15%; opacity: .72;
+  background: radial-gradient(circle at 40% 40%, #FFE7A0, var(--dio-sky, #E8862E)); box-shadow: 0 0 34px 6px rgba(232, 134, 46, .22); transform: translateX(calc(var(--px) * 6px)); }
+[data-theme="dark"] .diorama .dio-sun { background: radial-gradient(circle at 42% 38%, #FBF7EC, #C7CEE0); opacity: .78; box-shadow: 0 0 30px 5px rgba(220, 226, 240, .2); }
+/* 层级：城池(0) < 物候粒子(1) < 文字(2) < 朱印(3) */
+.profile-hero > .hero-particles { z-index: 1; }
+.profile-hero > *:not(.hero-particles):not(.seal):not(.diorama) { position: relative; z-index: 2; }
+.profile-hero > .seal { z-index: 3; }
+/* 副标/省份在深色城池前的可读性微护（主题自适应：浅色用亮 halo、暗色用暗 halo） */
+.profile-hero .cityname small, .profile-hero .tagline { text-shadow: 0 1px 9px var(--surface), 0 0 2px var(--surface); }
+
+/* P0-4 登机牌：城市卡 3D 翻转到纯 CSS 登机牌背面 */
+.city-grid .city-flip { perspective: 1100px; }
+.city-flip .card3d { position: relative; transform-style: preserve-3d; transition: transform .62s var(--ease-out); min-height: 158px; }
+.city-flip .card3d.flipped { transform: rotateY(180deg); }
+.city-flip .face { backface-visibility: hidden; -webkit-backface-visibility: hidden; min-height: 158px; }
+.city-flip .f-front { position: relative; height: 100%; }
+.city-flip .f-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+.flip-tab { position: absolute; top: 8px; right: 8px; z-index: 3; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 13px; color: var(--brass); border: 1px solid var(--brass-line); background: var(--surface); opacity: .66; transition: all var(--t-micro); }
+.flip-tab:hover { opacity: 1; color: var(--terra); border-color: var(--terra); transform: rotate(-16deg); }
+.bpass { padding: 0; overflow: hidden; }
+.bp { display: flex; flex-direction: column; height: 100%; padding: 12px 14px; gap: 7px; }
+.bp-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 9.5px; letter-spacing: .1em; color: var(--brass); border-bottom: 1px dashed var(--brass-line); padding-bottom: 6px; }
+.bp-flip { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--brass-line); color: var(--brass); font-size: 11px; display: grid; place-items: center; flex: none; transition: all var(--t-micro); }
+.bp-flip:hover { color: var(--terra); border-color: var(--terra); transform: rotate(-16deg); }
+.bp-route { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+.bp-pt { text-align: center; }
+.bp-pt b { font-family: Georgia, serif; font-size: 21px; display: block; line-height: 1; letter-spacing: .06em; color: var(--ink); }
+.bp-pt span { font-size: 11px; color: var(--ink-3); }
+.bp-arrow { color: var(--terra); font-size: 13px; }
+.bp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.bp-grid label { display: block; font-size: 8px; letter-spacing: .1em; color: var(--ink-3); }
+.bp-grid b { font-family: Georgia, serif; font-size: 12.5px; color: var(--ink-2); }
+.bp-bar { height: 20px; margin-top: auto; opacity: .78; border-radius: 2px; background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 9px); }
+.bp-go { width: 100%; }

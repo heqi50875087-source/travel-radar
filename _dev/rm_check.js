@@ -1,0 +1,30 @@
+/* reduce-motion 降级校验：关闭动画后每个大惊喜仍显示、信息不丢、零错误 */
+const { chromium } = require("playwright");
+const BASE = "http://localhost:8123", OUT = "/private/tmp/claude-501/-Users-apple-kushim-cc/31e268f5-c6e4-4733-ba12-73e9cf640ff6/scratchpad";
+let pass = 0, fail = 0; const ok = (c, m) => { c ? pass++ : (fail++, console.error("  ✗ " + m)); };
+(async () => {
+  const b = await chromium.launch();
+  const errors = [];
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
+  p.on("pageerror", (e) => errors.push(e.message));
+  await p.goto(BASE + "/#/city/" + encodeURIComponent("华山"), { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(800);
+  ok((await p.locator(".diorama .dio-l").count()) === 3, "P0-2 城池三层仍在（静态立定）");
+  await p.screenshot({ path: OUT + "/fx-8rm-city.png" });
+  await p.locator("text=去过").first().click();
+  await p.waitForTimeout(220);
+  ok((await p.locator(".stamp .s-main").count()) >= 1, "P0-3 盖章仍显示（信息不丢）");
+  await p.goto(BASE + "/#/explore", { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(700);
+  await p.locator(".flip-tab").first().click();
+  await p.waitForTimeout(220);
+  ok((await p.locator(".card3d.flipped .bp").count()) >= 1, "P0-4 登机牌仍可翻、信息在");
+  const t0 = await p.getAttribute("html", "data-theme");
+  await p.click("#themeBtn");
+  await p.waitForTimeout(160);
+  ok((await p.getAttribute("html", "data-theme")) !== t0, "P0-1 主题瞬切成功（无仪式动画）");
+  ok(errors.length === 0, "reduce-motion 零错误（实得 " + errors.length + "）");
+  await b.close();
+  console.log(`\nreduce-motion 降级：${pass} 通过 / ${fail} 失败`);
+  process.exit(fail ? 1 : 0);
+})();

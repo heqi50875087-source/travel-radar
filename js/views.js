@@ -157,6 +157,25 @@
     const S = TR.state;
     let kw = "", region = S.exploreRegion || "全部";
     const regions = ["全部", ...REGION_ORDER.filter((r) => window.TR_CORE.cities.some((c) => c.region === r))];
+    // P0-4 登机牌：3 字码 + 背面模板 + 翻转（背面懒加载）
+    const bpCode = (name) => { let h = 0; for (let i = 0; i < name.length; i++) h = (Math.imul(h, 31) + name.charCodeAt(i)) >>> 0; const L = "ABCDEFGHJKLMNPQRSTUVWXYZ"; return L[h % 24] + L[(h >> 5) % 24] + L[(h >> 10) % 24]; };
+    const boardingPass = (c) => {
+      if (!c) return "";
+      const same = S.settings.from === c.id, best = (c.seasons && c.seasons[0]) || (S.ctx.month + "月");
+      const fCode = same ? "◉" : bpCode(S.settings.from), fName = same ? "你在此" : S.settings.from;   // 出发地即本城时不再"飞往自己"
+      return `<div class="bp">
+        <div class="bp-head"><span>✈ 旅行雷达航空</span><span>BOARDING PASS</span><button class="bp-flip" data-flip aria-label="翻回正面">✈</button></div>
+        <div class="bp-route"><div class="bp-pt"><b>${esc(fCode)}</b><span>${esc(fName)}</span></div><div class="bp-arrow">✈</div><div class="bp-pt"><b>${bpCode(c.id)}</b><span>${esc(c.id)}</span></div></div>
+        <div class="bp-grid"><div><label>GATE 最佳</label><b>${esc(best)}</b></div><div><label>SEAT 人均</label><b>¥${c.perDay}</b></div><div><label>FLIGHT</label><b>TR${100 + (c.perDay % 800)}</b></div></div>
+        <div class="bp-bar"></div>
+        <button class="btn sm terra bp-go" data-checkin>值机 · 看档案 →</button></div>`;
+    };
+    const flipCard = (c3d) => {
+      const back = c3d.querySelector(".f-back");
+      if (back && !back._built) { const id = c3d.closest(".city-flip").dataset.city; back.innerHTML = boardingPass(cityById(id)); back._built = true; }
+      c3d.classList.toggle("flipped");
+      if (TR.sfx) TR.sfx.pick();
+    };
     root.innerHTML = `
     <section class="explore-head">
       <div class="sec-head" style="margin-top:24px"><span class="idx">Atlas</span><h2>城市图集</h2><span class="hint">${window.TR_CORE.cities.length} 城 · ${Object.keys(window.TR_DEEP || {}).length || 90} 份深度档案</span></div>
@@ -179,14 +198,19 @@
         return hay.includes(kw.toLowerCase());
       });
       $("#cityGrid").innerHTML = list.length ? list.map((c) => `
-        <article class="card hover city-card" data-city="${esc(c.id)}" data-tilt>
-          <h4>${esc(c.id)} ${c.hasDeep ? '<span class="deep-dot" title="有深度档案"></span>' : ""}</h4>
-          <p class="prov">${esc(c.province)} · ${esc(c.region)}</p>
-          <p class="tl">${esc(c.tagline)}</p>
-          <div class="foot"><span class="tag brass">${esc(c.days || "")}</span><span class="tag pine">¥${c.perDay}/天</span>${S.favs.includes(c.id) ? '<span class="tag terra">想去</span>' : ""}${S.visited.includes(c.id) ? '<span class="tag cyan">去过</span>' : ""}</div>
+        <article class="city-flip" data-city="${esc(c.id)}">
+          <div class="card3d">
+            <div class="card hover city-card face f-front">
+              <button class="flip-tab" data-flip aria-label="翻成登机牌" title="登机牌">✈</button>
+              <h4>${esc(c.id)} ${c.hasDeep ? '<span class="deep-dot" title="有深度档案"></span>' : ""}</h4>
+              <p class="prov">${esc(c.province)} · ${esc(c.region)}</p>
+              <p class="tl">${esc(c.tagline)}</p>
+              <div class="foot"><span class="tag brass">${esc(c.days || "")}</span><span class="tag pine">¥${c.perDay}/天</span>${S.favs.includes(c.id) ? '<span class="tag terra">想去</span>' : ""}${S.visited.includes(c.id) ? '<span class="tag cyan">去过</span>' : ""}</div>
+            </div>
+            <div class="card face f-back bpass"></div>
+          </div>
         </article>`).join("")
         : `<div class="empty" style="grid-column:1/-1"><b>没有匹配</b>换个关键词，或清空搜索</div>`;
-      TR.fx.tilt($("#cityGrid"));
     }
     $("#citySearch").addEventListener("input", (e) => { kw = e.target.value.trim(); renderGrid(); });
     $("#regionTabs").addEventListener("click", (e) => {
@@ -197,8 +221,10 @@
       renderGrid();
     });
     root.addEventListener("click", (e) => {
-      const card = e.target.closest(".city-card");
-      if (card) TR.router.go("city/" + card.dataset.city);
+      const flip = e.target.closest("[data-flip]");
+      if (flip) { const c3d = flip.closest(".card3d"); if (c3d) flipCard(c3d); return; }
+      const go = e.target.closest("[data-checkin], .f-front");
+      if (go) { const f = go.closest(".city-flip"); if (f) TR.router.go("city/" + f.dataset.city); }
     });
     renderGrid();
     TR.fx.constellation($("#constCanvas"), window.TR_CORE.cities, (c) => TR.router.go("city/" + c.id));
@@ -437,6 +463,7 @@
     }
     // hero 季节物候粒子（小 canvas · 离屏停表）
     if (TR.fx && TR.fx.seasonParticles) { const _hp = $("#heroParticles", body); if (_hp) TR.fx.seasonParticles(_hp); }
+    if (TR.fx && TR.fx.cityDiorama) { const _ph = $(".profile-hero", body); if (_ph) TR.fx.cityDiorama(_ph, c); }   // P0-2 立体书城池
     // 城市之声（DOM 就绪后注入一城一歌卡片；模块缺席则无副作用）
     if (window.TR && TR.sound) { const _cs = $("#citySoundSlot", body); if (_cs) _cs.appendChild(TR.sound.card(c)); }
     // 攻略卡：选天数/节奏即出逐日游玩指南
@@ -451,7 +478,10 @@
         if (pb) { gPace = pb.dataset.p; $$("#gPace .chip", gc).forEach((x) => x.classList.toggle("on", x.dataset.p === gPace)); paint(); return; }
         if (e.target.closest("#guideSave")) {
           const trip = TR.createTrip(c.id, gDays, S.ctx.month, gPace, "");
-          S.trips.unshift(trip); TR.persist(); if (TR.sfx) TR.sfx.save(); TR.toast("已存进行囊 🎒"); TR.router.go("plan/" + trip.id); return;
+          S.trips.unshift(trip); TR.persist();
+          if (TR.fx && TR.fx.stamp) { const d = new Date(), mm = String(d.getMonth() + 1).padStart(2, "0"), dd = String(d.getDate()).padStart(2, "0"); TR.fx.stamp({ text: c.id, sub: "收讫 · " + mm + "." + dd, flyTo: "plan" }); }
+          else if (TR.sfx) TR.sfx.save();
+          TR.toast("已存进行囊 🎒"); TR.router.go("plan/" + trip.id); return;
         }
         if (e.target.closest("#guideCopy")) {
           const itin = E().genItinerary(c.id, gDays, gPace);

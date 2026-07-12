@@ -32,6 +32,13 @@ ok(ids.has("顺德") && ids.has("自贡"), "顺德/自贡 已补卡");
 const hz = DEEP["杭州"];
 ok(hz && hz.mustEat2.length > 10 && hz.radar && hz.radar.tips.avoid.length > 0, "杭州档案字段齐全");
 
+/* 工单03/04 · 10 座深度新城（华山山岳批 + 大西北当季批） */
+const NEW10 = ["华山", "五台山", "武隆", "镜泊湖", "阿尔山", "茶卡盐湖", "嘉峪关", "中卫", "喀纳斯", "喀拉峻"];
+ok(NEW10.every((c) => DEEP[c] && DEEP[c].radar), "10 新城深度档案（含 radar）齐全");
+ok(NEW10.every((c) => { const x = CORE.cities.find((y) => y.id === c); return x && x.hasDeep === true; }), "10 新城 hasDeep=true");
+ok(NEW10.every((c) => CORE.climate[c] && Object.keys(CORE.climate[c]).length === 12), "10 新城 climate 12 个月");
+ok(NEW10.every((c) => CORE.budget[c] && ["经济", "中端", "品质"].every((t) => CORE.budget[c][t])), "10 新城 budget 三档齐全");
+
 /* 工具函数 */
 const d1 = TR.distKm(CORE.coords["上海"], CORE.coords["杭州"]);
 ok(d1 > 120 && d1 < 220, `沪杭距离合理(${d1}km)`);

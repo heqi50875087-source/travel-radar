@@ -327,4 +327,152 @@
     ], { duration: 920, easing: "cubic-bezier(.4,0,.2,1)" });
     anim.onfinish = anim.oncancel = () => el.remove();
   };
+
+  /* ══ 大惊喜层（Fable 菜单 v1）· 守零依赖 / 离线 / reduce-motion 全降级 ══ */
+
+  /* P0-1 点灯仪式：日落月升 + 星子扎眼（一次性天体层，叠在 switchTheme 圆形擦除之上；1.7s 后自清） */
+  FX.lightCeremony = function (originEl, toDark) {
+    if (reduced() || FX._skyBusy) return;
+    FX._skyBusy = true;
+    const layer = document.createElement("div");
+    layer.className = "sky-ceremony"; layer.setAttribute("aria-hidden", "true");
+    const sun = document.createElement("div"); sun.className = "cel sun";
+    const moon = document.createElement("div"); moon.className = "cel moon";
+    layer.append(sun, moon); document.body.appendChild(layer);
+    const W = innerWidth, H = innerHeight, dur = 1000, ease = "cubic-bezier(.4,0,.2,1)";
+    const pos = (x, y, s, o) => ({ transform: `translate(${x}px,${y}px) scale(${s})`, opacity: o });
+    if (toDark) {
+      sun.animate([pos(W * .62, H * .2, 1, 1), pos(W * .28, H * 1.04, .7, 0)], { duration: dur, easing: ease, fill: "forwards" });
+      moon.animate([pos(W * .72, H * 1.04, .7, 0), pos(W * .4, H * .18, 1, 1)], { duration: dur, easing: ease, fill: "forwards" });
+      const stars = document.createElement("div"); stars.className = "stars"; layer.appendChild(stars);
+      const sh = [];
+      for (let i = 0; i < 46; i++) sh.push(`${(Math.random() * W) | 0}px ${(Math.random() * H * .62) | 0}px 0 ${(Math.random() * 1.3).toFixed(1)}px #FDF7E3`);
+      stars.style.boxShadow = sh.join(",");
+      stars.animate([{ opacity: 0 }, { opacity: 1, offset: .55 }, { opacity: 0 }], { duration: 1600, easing: "ease-in-out" });
+    } else {
+      moon.animate([pos(W * .4, H * .18, 1, 1), pos(W * .72, H * 1.04, .7, 0)], { duration: dur, easing: ease, fill: "forwards" });
+      sun.animate([pos(W * .28, H * 1.04, .7, 0), pos(W * .62, H * .2, 1, 1)], { duration: dur, easing: ease, fill: "forwards" });
+    }
+    setTimeout(() => { layer.remove(); FX._skyBusy = false; }, 1700);
+  };
+
+  /* P0-3 过关盖章：收下型动作砸下朱印 + 墨渍迸溅，停留后飞向对应 tab（一次性，节点必清） */
+  function mkStamp(opts) {
+    const s = document.createElement("div"); s.className = "stamp";
+    s.innerHTML = `<span class="s-main">${TR.esc(opts.text || "收讫")}</span><span class="s-sub">${TR.esc(opts.sub || "")}</span>`;
+    return s;
+  }
+  FX.stamp = function (opts) {
+    opts = opts || {};
+    if (TR.sfx && opts.sound !== false) TR.sfx.save();   // 音效独立于动画：reduce-motion 下也有盖章声
+    if (reduced()) {
+      const st = document.createElement("div"); st.className = "stamp-stage";
+      const s = mkStamp(opts); s.className = "stamp still"; st.appendChild(s); document.body.appendChild(st);
+      s.animate([{ opacity: 0 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0 }], { duration: 900, easing: "ease" }).onfinish = () => st.remove();
+      return;
+    }
+    const nav = opts.flyTo || "plan";  // 选"可见"的那个导航（桌面 tabbar 隐藏但仍在 DOM，getBoundingClientRect 会是 0）
+    const tab = [].slice.call(document.querySelectorAll('.tabbar a[data-nav="' + nav + '"], .topnav a[data-nav="' + nav + '"]')).find((el) => el.offsetParent !== null) || null;
+    const wrap = document.createElement("div"); wrap.className = "stamp-stage"; wrap.setAttribute("aria-hidden", "true");
+    const stamp = mkStamp(opts); wrap.appendChild(stamp);
+    const splats = [];
+    for (let i = 0; i < 10; i++) { const d = document.createElement("i"); d.className = "splat"; wrap.appendChild(d); splats.push(d); }
+    document.body.appendChild(wrap);
+    let cleaned = false;
+    const done = () => { if (cleaned) return; cleaned = true; wrap.remove(); };
+    const slam = stamp.animate([
+      { transform: "translate(-50%,-50%) scale(2.6) rotate(-16deg)", opacity: 0 },
+      { transform: "translate(-50%,-50%) scale(.94) rotate(-6deg)", opacity: 1, offset: .34 },
+      { transform: "translate(-50%,-50%) scale(1.05) rotate(-6deg)", offset: .42 },
+      { transform: "translate(-50%,-50%) scale(1) rotate(-6deg)", opacity: 1, offset: .5 },
+      { transform: "translate(-50%,-50%) scale(1) rotate(-6deg)", opacity: 1 },
+    ], { duration: 900, easing: "cubic-bezier(.3,1.4,.5,1)", fill: "forwards" });
+    setTimeout(() => {
+      document.body.animate([{ transform: "translateY(0)" }, { transform: "translateY(2px)" }, { transform: "translateY(0)" }], { duration: 90 });
+      splats.forEach((d, i) => {
+        const a = (i / splats.length) * 6.283 + Math.random() * .5, dist = 60 + Math.random() * 90;
+        d.animate([{ transform: "translate(-50%,-50%) scale(.2)", opacity: .9 }, { transform: `translate(calc(-50% + ${(Math.cos(a) * dist) | 0}px),calc(-50% + ${(Math.sin(a) * dist) | 0}px)) scale(1)`, opacity: 0 }], { duration: 520, easing: "cubic-bezier(.2,.8,.3,1)", fill: "forwards" });
+      });
+    }, 300);
+    slam.onfinish = () => {
+      if (!tab) { stamp.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: "forwards" }).onfinish = done; return; }
+      const tr = tab.getBoundingClientRect(), tx = tr.left + tr.width / 2, ty = tr.top + tr.height / 2;
+      const fly = stamp.animate([
+        { transform: "translate(-50%,-50%) scale(1) rotate(-6deg)", opacity: 1 },
+        { transform: `translate(${(tx - innerWidth / 2) | 0}px, ${(ty - innerHeight / 2) | 0}px) scale(.12) rotate(20deg)`, opacity: .15 },
+      ], { duration: 520, easing: "cubic-bezier(.5,0,.8,.4)", fill: "forwards" });
+      fly.onfinish = fly.oncancel = () => { done(); if (tab) { tab.classList.remove("badge-pop"); void tab.offsetWidth; tab.classList.add("badge-pop"); } };
+    };
+    setTimeout(done, 2000); // 兜底清理，杜绝 fill:forwards 残留常驻
+  };
+
+  /* P0-2 立体书城池：档案页 hero 的无图视觉主角——程序化纸雕地平线三层，进页翻立 + 指针视差
+     用城市名作种子，山脊/天际线永远平滑干净且每城不同；按场景关键词调频幅并加点缀（日月/松/桥）。*/
+  function _hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function _rng(seed) { let h = seed >>> 0; return () => { h = (Math.imul(h, 1103515245) + 12345) >>> 0; return h / 4294967296; }; }
+  function _pickScene(city) {
+    const t = (city.tagline || "") + (city.region || "") + ((city.foodTags || []).join(""));
+    if (/沙|漠|戈壁|盐湖|胡杨|雅丹|敦煌/.test(t)) return "desert";
+    if (/海岛|海滨|海边|滨海|渔港|沙滩|群岛|椰|三亚|北海|海湾/.test(t)) return "coast";   // 收紧:不再让"洱海"等含"海"的湖误判为海岸
+    if (/草原|牧场|牧区|坝上|那拉提|喀拉峻|草甸/.test(t)) return "grassland";
+    if (/水乡|园林|运河|古镇|古城|湖|江|河|泉|洱海/.test(t)) return "water";               // 水乡先于森林:"园林"不再被"林"误判
+    if (/森林|林海|针叶|白桦|雪乡|原始森林/.test(t)) return "forest";                        // 收紧:去掉裸"林/雪/冰"
+    if (/雪山|高原|险|栈道|峰|岭|山|喀斯特|梯田|丹霞|峡谷/.test(t)) return "mountain";
+    const r = city.region || "";
+    if (/西北/.test(r)) return "desert";
+    if (/海岛/.test(r)) return "coast";
+    if (/西南/.test(r)) return "mountain";
+    if (/东北/.test(r)) return "forest";
+    if (/华东|华中/.test(r)) return "water";
+    return "skyline";
+  }
+  const _JAG = { desert: 0, grassland: 0, coast: 0, mountain: 5, forest: 2, water: 0, skyline: 0 };     // 山峦锯齿险峻、沙丘草原平缓——拉开场景性格
+  const _AMP = { desert: 1.5, grassland: .5, coast: .72, mountain: 1.55, forest: 1.0, water: .58, skyline: 1 };
+  const _LIFT = { mountain: -16, desert: -6, water: 12, grassland: 16, coast: 8, forest: 0, skyline: 0 };  // 山更高、水草更低平
+  function _ridge(rnd, baseY, amp, jag) {
+    const n = 9, ph = rnd() * 6.283, f1 = 1 + ((rnd() * 2) | 0), f2 = Math.max(1, jag) * (1 + ((rnd() * 2) | 0));
+    const y = (i) => baseY - amp * (0.5 + 0.5 * Math.sin(ph + i / n * 6.283 * f1)) - amp * 0.34 * Math.sin(i / n * 6.283 * f2);
+    let d = `M0 160 L0 ${y(0).toFixed(1)}`;
+    for (let i = 1; i <= n; i++) { const x = i / n * 400, px = (i - 1) / n * 400, cx = (px + x) / 2; d += ` Q${px.toFixed(1)} ${y(i - 1).toFixed(1)} ${cx.toFixed(1)} ${((y(i - 1) + y(i)) / 2).toFixed(1)}`; }
+    return d + " L400 160 Z";
+  }
+  function _skyline(rnd, baseTop) {
+    let d = "", x = -10;
+    while (x < 410) { const w = 15 + ((rnd() * 28) | 0), top = baseTop + ((rnd() * 46) | 0); d += `M${x} 160V${top}h${w}V160Z`; x += w + 2 + ((rnd() * 7) | 0); }
+    return d;
+  }
+  function _pines(rnd) { let d = "", x = -6; while (x < 406) { const w = 18 + ((rnd() * 16) | 0), h = 34 + ((rnd() * 34) | 0); d += `M${x} 160 L${(x + w / 2).toFixed(1)} ${160 - h} L${x + w} 160Z`; x += w * 0.72; } return d; }
+  function _bridge(seed) { const cx = 130 + (_hash("b" + seed) % 140); return `M${cx - 48} 160 Q${cx} 116 ${cx + 48} 160 Z M${cx - 30} 160 Q${cx} 132 ${cx + 30} 160 Z`; }
+  FX.cityDiorama = function (host, city) {
+    if (!host || host._dioOn) return; host._dioOn = true;
+    const scene = _pickScene(city), seed = _hash(city.id || "x"), urban = scene === "skyline";
+    const wrap = document.createElement("div"); wrap.className = "diorama dio-" + scene; wrap.setAttribute("aria-hidden", "true");
+    if (city.color) wrap.style.setProperty("--dio-sky", city.color);
+    const defs = [{ c: "l0", baseY: 76, amp: 34, op: .42 }, { c: "l1", baseY: 98, amp: 30, op: .5 }, { c: "l2", baseY: 120, amp: 24, op: .72 }];
+    defs.forEach((L, i) => {
+      const rnd = _rng(seed + i * 911);
+      let d = urban ? _skyline(rnd, 58 + i * 18) : _ridge(rnd, L.baseY + (_LIFT[scene] || 0), L.amp * (_AMP[scene] || 1), (_JAG[scene] || 0) + i + 1);
+      if (scene === "forest" && i === 2) d += " " + _pines(_rng(seed + 77));
+      if (scene === "water" && i === 2) d += " " + _bridge(seed);
+      const layer = document.createElement("div"); layer.className = "dio-l " + L.c;
+      layer.innerHTML = `<svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
+      wrap.appendChild(layer);
+    });
+    const sun = document.createElement("div"); sun.className = "dio-sun"; wrap.appendChild(sun);
+    host.insertBefore(wrap, host.firstChild);
+    if (!reduced()) {
+      Array.prototype.forEach.call(wrap.querySelectorAll(".dio-l"), (l, i) => {
+        l.animate([{ transform: "translateZ(var(--z)) rotateX(-84deg)", opacity: 0 }, { transform: "translateZ(var(--z)) rotateX(0deg)", opacity: defs[i].op }],
+          { duration: 760, delay: 150 + i * 130, easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" });
+      });
+      if (window.matchMedia("(hover:hover) and (pointer:fine)").matches) {
+        let tick = false, val = 0;
+        host.addEventListener("pointermove", (e) => {
+          const r = host.getBoundingClientRect(); val = (e.clientX - r.left) / r.width - .5;
+          if (!tick) { tick = true; requestAnimationFrame(() => { wrap.style.setProperty("--px", val.toFixed(3)); tick = false; }); }
+        });
+        host.addEventListener("pointerleave", () => wrap.style.setProperty("--px", "0"));
+      }
+    }
+  };
 })(window.TR);
