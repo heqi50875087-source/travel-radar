@@ -16,7 +16,7 @@
     <section class="hero contour">
       <canvas class="hero-canvas" id="radarCanvas" aria-hidden="true"></canvas>
       <div class="hero-inner">
-        <p class="eyebrow">PERSONAL TRAVEL RADAR · 私人旅行参谋</p>
+        <p class="eyebrow"><span lang="en">PERSONAL TRAVEL RADAR</span> · 私人旅行参谋</p>
         <h1>这个月，<em>去哪儿</em><br>见一面世界？</h1>
         <p class="sub">把月份、假期和你的口味交给雷达，它从 ${window.TR_CORE.cities.length} 个目的地里替你收敛成三个答案——每个都说人话、给理由、提前预警。</p>
         <div class="pledge">
@@ -164,7 +164,7 @@
       const same = S.settings.from === c.id, best = (c.seasons && c.seasons[0]) || (S.ctx.month + "月");
       const fCode = same ? "◉" : bpCode(S.settings.from), fName = same ? "你在此" : S.settings.from;   // 出发地即本城时不再"飞往自己"
       return `<div class="bp">
-        <div class="bp-head"><span>✈ 旅行雷达航空</span><span>BOARDING PASS</span><button class="bp-flip" data-flip aria-label="翻回正面">✈</button></div>
+        <div class="bp-head"><span>✈ 旅行雷达航空</span><span lang="en">BOARDING PASS</span><button class="bp-flip" data-flip aria-label="翻回正面">✈</button></div>
         <div class="bp-route"><div class="bp-pt"><b>${esc(fCode)}</b><span>${esc(fName)}</span></div><div class="bp-arrow">✈</div><div class="bp-pt"><b>${bpCode(c.id)}</b><span>${esc(c.id)}</span></div></div>
         <div class="bp-grid"><div><label>GATE 最佳</label><b>${esc(best)}</b></div><div><label>SEAT 人均</label><b>¥${c.perDay}</b></div><div><label>FLIGHT</label><b>TR${100 + (c.perDay % 800)}</b></div></div>
         <div class="bp-bar"></div>
@@ -237,12 +237,14 @@
     if (!c) { root.innerHTML = `<div class="empty" style="margin-top:40px"><b>没有找到「${esc(id)}」</b><a class="btn sm ghost" href="#/explore" style="margin-top:10px">回城市图集</a></div>`; return; }
     const S = TR.state;
     root.innerHTML = `<div class="profile"><div class="profile-top">
-      <button class="back-btn" onclick="history.back()">← 返回</button>
+      <button class="back-btn" id="cityBack">← 返回</button>
       <span style="flex:1"></span>
       <button class="btn sm ghost fav-btn ${S.favs.includes(id) ? "on" : ""}" id="favBtn">${S.favs.includes(id) ? "已想去 ♥" : "想去 ♡"}</button>
       <button class="btn sm ghost visited-btn ${S.visited.includes(id) ? "on" : ""}" id="visitedBtn">${S.visited.includes(id) ? "去过 ✓" : "去过?"}</button>
     </div><div id="profileBody"><div class="empty" style="margin-top:30px"><b>翻档案中……</b></div></div></div>`;
 
+    // 无内联 onclick（严格 CSP 友好）；深链直接进档案时 back 会跳出站点，故回落到城市图集
+    $("#cityBack").addEventListener("click", () => { if (history.length > 1) history.back(); else TR.router.go("explore"); });
     $("#favBtn").addEventListener("click", () => { TR.toggleFav(id); V.city(root, id); });
     $("#visitedBtn").addEventListener("click", () => { TR.toggleVisited(id); V.city(root, id); });
 
@@ -318,6 +320,15 @@
       const q = d.radar.quickGlance;
       B("glance", "速览", "wide", "🧭", "速览", "", `<div class="list-rows">${q.bullets.map((b) => `<div class="row"><span>${esc(b)}</span></div>`).join("")}</div>
         <div class="chips-flow" style="margin-top:12px">${(q.tags || []).map((t) => `<span class="tag brass">${esc(t)}</span>`).join(" ")}</div>`);
+    }
+    // 兼容旧「四标签」雷达 schema（约 20 城：香港/巴黎/新加坡/首尔/九寨沟/敦煌…）——
+    // 其 radar 是 {tab1_food,tab2_sights,tab3_culture,tab4_practical}，旧渲染只认 quickGlance/travel/tips 会整段丢失，这里补出。
+    else if (d && d.radar && d.radar.tab1_food) {
+      const R = d.radar, items = (t) => (t && t.items) || [];
+      const seg = [["tab1_food", "🍜"], ["tab2_sights", "🗺"], ["tab3_culture", "🎭"], ["tab4_practical", "🧭"]]
+        .map(([k, ico]) => items(R[k]).length ? `<h4 style="margin:12px 0 8px;font-size:13.5px">${ico} ${esc(R[k].title || "")}</h4>${rows(items(R[k]))}` : "").join("");
+      if (seg) { const n = items(R.tab1_food).length + items(R.tab2_sights).length + items(R.tab3_culture).length + items(R.tab4_practical).length;
+        B("radar4", "雷达", "full", "📡", "本地雷达 · 食景文用", "", fold(seg, "rows", n, 10)); }
     }
     if (monthsHtml) B("months", "月历", "full", "📅", "十二月历", "", `<div class="months-strip">${monthsHtml}</div><p class="desc" style="margin-top:4px">红框=当前月 · 金边=最佳季（${esc((c.seasons || []).join("、"))}）</p>`);
     if (d && d.mustEat2 && d.mustEat2.length) B("eat", "吃", "", "🍜", "必吃", d.mustEat2.length, fold(chipFlow(d.mustEat2, true), "chips", d.mustEat2.length, 12) + `<p class="desc tap-hint">点任意一项 → 导航 / 记笔记</p>`);
@@ -510,7 +521,7 @@
         <button class="btn ghost" id="sheetNote">📝 记进${esc(cityId)}笔记</button>
         <button class="btn ghost" id="sheetCopy">📋 复制名字</button>
       </div></div></div>`;
-    const close = () => { rootM.innerHTML = ""; };
+    const close = TR.wireModal($("#sheetMask"), () => { rootM.innerHTML = ""; });
     $("#sheetX").addEventListener("click", close);
     $("#sheetMask").addEventListener("click", (e) => { if (e.target.id === "sheetMask") close(); });
     $("#sheetNote").addEventListener("click", () => {
@@ -528,7 +539,8 @@
      每次打开都是全量列表——根治 datalist「选一个后被过滤锁死」的顽疾。 */
   function cityPicker(currentValue, onPick) {
     const S = TR.state, rootM = $("#modal-root"), cities = window.TR_CORE.cities;
-    const close = () => { rootM.innerHTML = ""; };
+    const baseClose = () => { rootM.innerHTML = ""; };
+    let close = baseClose;
     const chip = (c) => `<button class="pick-chip ${c.id === currentValue ? "on" : ""}" data-pick="${esc(c.id)}">${esc(c.id)}${c.hasDeep ? '<i class="dot" title="有深度档案"></i>' : ""}</button>`;
     function bodyHtml(kw) {
       kw = (kw || "").trim().toLowerCase();
@@ -548,9 +560,10 @@
     }
     rootM.innerHTML = `<div class="modal-mask" id="pickerMask"><div class="modal-box sheet city-picker">
       <div class="modal-head"><h3>选择城市</h3><button class="modal-x" id="pickerX">✕</button></div>
-      <div class="search-row"><input class="field" id="pickerSearch" placeholder="搜城市 / 省份 / 关键词（早茶、雪、古镇）" autocomplete="off"></div>
+      <div class="search-row"><input class="field" id="pickerSearch" placeholder="搜城市 / 省份 / 关键词（早茶、雪、古镇）" autocomplete="off" data-autofocus></div>
       <div class="picker-body" id="pickerBody">${bodyHtml("")}</div>
     </div></div>`;
+    close = TR.wireModal($("#pickerMask"), baseClose);
     $("#pickerX").addEventListener("click", close);
     $("#pickerMask").addEventListener("click", (e) => { if (e.target.id === "pickerMask") close(); });
     $("#pickerSearch").addEventListener("input", (e) => { $("#pickerBody").innerHTML = bodyHtml(e.target.value); });
@@ -816,8 +829,9 @@
         <p class="manifesto">这是一个人的旅行参谋部，也是你自己的旅行记忆体。<br>
         它<b>不卖票、不种草、不推流</b>——推荐只对你的口味负责；<br>
         它相信最好的旅行工具，是<b>最快帮你做完决定就该被关掉</b>的那种；<br>
-        它把 ${window.TR_CORE.cities.length} 座城市、${Object.keys(window.TR_DEEP || {}).length || 90} 份深度档案装进口袋，<b>离线也在</b>。<br>
+        它把 ${window.TR_CORE.cities.length} 座城市、${Object.keys(window.TR_DEEP || {}).length || 119} 份深度档案装进口袋，<b>离线也在</b>。<br>
         <span style="font-size:12.5px;color:var(--ink-3)">数据：2024-2026 手工编研城市档案，非实时票价；交通与营业信息出行前请复核。</span></p>
+        <p class="doc-row"><a class="doc-link" href="#/about">完整介绍</a> · <a class="doc-link" href="#/privacy">隐私政策</a> · <a class="doc-link" href="#/help">帮助与常见问题</a></p>
         ${window.TR && TR.sound ? `<p class="theme-song">♪ 本站主题曲 · <a target="_blank" rel="noopener" href="${TR.sound.netease(TR.sound.ANTHEM.song, TR.sound.ANTHEM.artist)}">${esc(TR.sound.ANTHEM.song)}</a> · ${esc(TR.sound.ANTHEM.artist)}</p>` : ""}
       </section>`;
 

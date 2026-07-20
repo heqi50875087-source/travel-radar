@@ -59,6 +59,32 @@ window.TR = window.TR || {};
   TR.prefersReducedMotion = () =>
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* 模态无障碍：打开后聚焦首个可交互元素、Esc 关闭、Tab 焦点不逃逸、关闭后焦点归还开启者。
+     用法：设好 innerHTML 后 `const close = TR.wireModal(maskEl, baseClose)`，之后一律用返回的 close。 */
+  TR.wireModal = function (mask, baseClose) {
+    if (!mask) return baseClose;
+    const opener = document.activeElement;
+    const box = mask.querySelector(".modal-box") || mask;
+    const SEL = 'a[href],button:not([disabled]),input:not([disabled]),textarea,select,[tabindex]:not([tabindex="-1"])';
+    const foc = () => TR.$$(SEL, box).filter((el) => el.offsetParent !== null);
+    setTimeout(() => { const f = box.querySelector("[data-autofocus]") || foc()[0]; if (f) { try { f.focus(); } catch (e) {} } }, 0);
+    function onKey(e) {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.key !== "Tab") return;
+      const f = foc(); if (!f.length) return;
+      const a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
+    document.addEventListener("keydown", onKey);
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      baseClose();
+      if (opener && opener.focus) { try { opener.focus(); } catch (e) {} }
+    }
+    return close;
+  };
+
   // 深度数据就绪回调（deep.js 异步加载）
   TR.whenDeep = function (cb) {
     if (window.TR_DEEP) { cb(window.TR_DEEP); return; }

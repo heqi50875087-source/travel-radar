@@ -158,7 +158,19 @@ ok(E.PREFS.length === 16, "16 偏好胶囊");
   // 复位为空配置，避免影响后续断言
   globalThis.TR_BIZ.affiliate.ctrip = '';
   globalThis.TR_BIZ.affiliate.klook = '';
-  console.log('✓ 商业化 M1 断言 ×14 全部通过');
+
+  // —— 页脚合规文案随配置动态化（杜绝空配置也宣称佣金/统计的自相矛盾）——
+  assert(/零佣金/.test(biz.footerText()) && !/推广/.test(biz.footerText()) && !/已启用/.test(biz.footerText()),
+    'M1-15 空配置页脚=干净承诺（含「零佣金」、不含「推广」「已启用统计」）');
+  globalThis.TR_BIZ.affiliate.ctrip = '888,999';
+  assert(/推广/.test(biz.footerText()), 'M1-16 挂了联盟后页脚才出现「推广」佣金句');
+  globalThis.TR_BIZ.affiliate.ctrip = '';
+  globalThis.TR_BIZ.analytics = { provider: 'baidu', id: 'x' };
+  assert(/已启用.*统计/.test(biz.footerText()), 'M1-17 开了统计后页脚才提「已启用统计」');
+  globalThis.TR_BIZ.analytics = { provider: '', id: '' };
+  assert(!/推广/.test(biz.footerText()) && !/已启用/.test(biz.footerText()),
+    'M1-18 复位后页脚回到干净承诺');
+  console.log('✓ 商业化 M1 断言 ×18 全部通过');
 })();
 
 /* ===== 商业化 M2 断言（×6） ===== */
@@ -254,6 +266,24 @@ ok(E.PREFS.length === 16, "16 偏好胶囊");
     'CS-08 六种气质均有兜底曲');
 
   console.log('✓ 城市之声断言 ×8 全部通过');
+})();
+
+/* ===== 信息页/引导 · 接线一致性（×8） ===== */
+(function () {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf-8");
+  const html = read("index.html"), app = read("js/app.js"), sw = read("sw.js"), pages = read("js/pages.js");
+  // pages.js 必须在 views.js 之后、app.js 之前加载（依赖 TR.views 已建、供 app 路由调用）
+  const iP = html.indexOf("js/pages.js"), iV = html.indexOf("js/views.js"), iA = html.indexOf("js/app.js");
+  ok(iV >= 0 && iP > iV && iA > iP, "index.html 按 views→pages→app 顺序加载");
+  ["about", "privacy", "help"].forEach((r) => {
+    ok(new RegExp(r + ":\\s*1").test(app), "路由白名单含 " + r);
+    ok(new RegExp("V\\." + r + "\\s*=").test(pages), "pages.js 注册 V." + r);
+  });
+  ok(/TR\.onboard\s*=/.test(pages) && /TR\.onboard/.test(app), "首访引导已定义并在启动调用");
+  ok(/"\.\/js\/pages\.js"/.test(sw), "SW SHELL 含 pages.js");
+  const ver = (sw.match(/VERSION\s*=\s*"tr-v(\d+)"/) || [])[1];
+  ok(ver && +ver >= 13, "SW 版本已 bump 到 ≥ v13（实际 v" + ver + "）");
+  console.log("✓ 信息页/引导接线断言 全部通过");
 })();
 
 console.log(fail === 0 ? `\n✅ 自检通过 ${n}/${n}` : `\n❌ ${fail}/${n} 未过`);

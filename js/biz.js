@@ -234,14 +234,7 @@
     /* 「带「推广」标的链接可能为站长带来少量佣金，价格与你直接搜到的一致。
         依旧不跟踪你——数据不出你的设备。」 */
 
-  var FOOTER_TEXT =
-    '\u672C\u7AD9\u79BB\u7EBF\u53EF\u7528\u3001\u4E0D\u8DDF\u8E2A\u4F60\u3002\u90E8\u5206\u51FA\u884C/' +
-    '\u88C5\u5907\u94FE\u63A5\u5E26\u300C\u63A8\u5E7F\u300D\u5C0F\u6807\u2014\u2014\u7ECF\u5B83\u4EEC\u4E0B' +
-    '\u5355\uFF0C\u7AD9\u957F\u53EF\u80FD\u5F97\u5230\u4E00\u70B9\u4F63\u91D1\uFF0C\u4F60\u7684\u4EF7\u683C' +
-    '\u4E0D\u53D8\u3002\u7EDF\u8BA1\u9ED8\u8BA4\u5173\u95ED\uFF1B\u5373\u4FBF\u5F00\u542F\uFF0C\u4E5F\u53EA' +
-    '\u662F\u533F\u540D\u805A\u5408\u3002';
-    /* 「本站离线可用、不跟踪你。部分出行/装备链接带「推广」小标——经它们下单，
-        站长可能得到一点佣金，你的价格不变。统计默认关闭；即便开启，也只是匿名聚合。」 */
+  /* 页脚合规文案改由 renderFooterDisclosure 按配置动态生成，见下。 */
 
   /* ============ 5. UI 渲染（浏览器专用；Node 下这些函数直接返回 null） ============ */
   var cssInjected = false;
@@ -349,13 +342,29 @@
     return card;
   }
 
+  /* 页脚合规文案 —— 纯函数，按实际配置返回。空配置（当前状态）= 干净承诺，
+     与首页「零广告·零佣金·不跟踪」一致，绝不描述不存在之物。可在 Node 下断言。 */
+  function footerText() {
+    var C = cfg(), aff = (root.TR_BIZ && root.TR_BIZ.affiliate) || {};
+    var hasAff = ['ctrip', 'tripcom', 'klook', 'taobao', 'jd'].some(function (k) { return String(aff[k] || '').trim(); });
+    var hasStats = !!(C.analytics && C.analytics.provider && C.analytics.id);
+    if (!hasAff && !hasStats) {
+      return '本站离线可用、零广告、零佣金，不加载任何第三方统计——你的收藏与足迹只留在这台设备。';
+      // 本站离线可用、零广告、零佣金，不加载任何第三方统计——你的收藏与足迹只留在这台设备。
+    }
+    var t = '本站离线可用、不跟踪你。';  // 本站离线可用、不跟踪你。
+    if (hasAff) t += '部分出行/装备链接带「推广」小标，经它们下单站长可能得到少量佣金，你的价格不变。';  // 部分出行/装备链接带「推广」小标，经它们下单站长可能得到少量佣金，你的价格不变。
+    if (hasStats) t += '本站已启用匿名聚合统计（不含任何个人身份信息）。';  // 本站已启用匿名聚合统计（不含任何个人身份信息）。
+    return t;
+  }
+
   /* 合规页脚一行字（「我的」页或全站页脚容器） */
   function renderFooterDisclosure(container) {
     if (typeof document === 'undefined' || !container) return null;
     injectCSS();
     var p = document.createElement('p');
     p.className = 'trb-footer';
-    p.textContent = FOOTER_TEXT;
+    p.textContent = footerText();
     container.appendChild(p);
     return p;
   }
@@ -366,6 +375,7 @@
     renderLinks: renderLinks,
     tripCard: tripCard,
     renderFooterDisclosure: renderFooterDisclosure,
+    footerText: footerText,
     initAnalytics: initAnalytics,
     track: track,
     disclosure: DISCLOSURE,

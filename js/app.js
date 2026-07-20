@@ -145,10 +145,11 @@
   }
 
   /* ---------- 路由 ---------- */
-  const VIEWS = { radar: 1, explore: 1, city: 1, plan: 1, me: 1 };
+  const VIEWS = { radar: 1, explore: 1, city: 1, plan: 1, me: 1, about: 1, privacy: 1, help: 1 };
   function dispatch() {
     const { view, arg } = TR.router.parse();
-    const v = VIEWS[view] ? view : "radar";
+    // 已知视图正常渲染；未知路由 → 走丢页（保留地址栏坏 hash，不静默假装是雷达）
+    const v = VIEWS[view] ? view : (TR.views.notFound ? "notFound" : "radar");
     const root = TR.$("#view");
     root.replaceChildren();               // 清旧监听的根（innerHTML 前先断引用）
     const fresh = root.cloneNode(false);  // 丢弃旧事件监听器
@@ -169,6 +170,13 @@
     const toDark = cur !== "dark";
     if (TR.fx && TR.fx.lightCeremony) TR.fx.lightCeremony(e.currentTarget, toDark);   // 点灯仪式：日落月升+星子
     TR.switchTheme(() => { TR.state.settings.theme = toDark ? "dark" : "light"; TR.persist(); }, e.currentTarget);
+  });
+
+  /* ---------- 键盘：readonly 的选择器输入用 Enter/Space 打开（click 不会被键盘触发） ---------- */
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target && e.target.classList && e.target.classList.contains("picker-input")) {
+      e.preventDefault(); e.target.click();
+    }
   });
 
   /* ---------- Service Worker（仅 https；file:// 全功能不依赖） ---------- */
@@ -204,6 +212,7 @@
   dispatch();
   loadDeep();
   installHint();
+  if (TR.onboard) TR.onboard();
   // E1 季节角标：底栏「雷达」按当前月出一枚小节气（3-5🌸 6-8🍃 9-11🍂 12-2❄）
   (function () {
     const m = TR.monthNow(), e = m >= 3 && m <= 5 ? "🌸" : m >= 6 && m <= 8 ? "🍃" : m >= 9 && m <= 11 ? "🍂" : "❄️";
