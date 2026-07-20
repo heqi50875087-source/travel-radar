@@ -826,3 +826,11 @@ button.item.act:active::after { opacity: .9; transform: translateX(-50%) scale(1
 .field:focus-visible, .picker-input:focus-visible { outline: 2px solid var(--terra); outline-offset: 1px; }
 /* 鼠标点击不弹环，仅键盘导航时出现（现代浏览器 :focus-visible 已内建此语义） */
 .modal-x { min-width: 40px; min-height: 40px; }
+
+/* 跳到主内容：默认藏在屏幕外，键盘聚焦时滑入（WCAG 2.4.1） */
+.skip-link { position: fixed; top: -60px; left: 12px; z-index: 200;
+  background: var(--terra-deep); color: #FFF6EF; padding: 10px 16px;
+  border-radius: 8px; font-size: 14px; box-shadow: var(--shadow-md);
+  transition: top .18s var(--ease-out); }
+.skip-link:focus { top: calc(12px + env(safe-area-inset-top)); }
+#view:focus { outline: none; }  /* 落焦为跳转目标，不给整块主区画环 */

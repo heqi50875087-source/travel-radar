@@ -157,8 +157,12 @@
     fresh.classList.add("view-enter");
     setTimeout(() => fresh.classList.remove("view-enter"), 600);
     TR.views[v](fresh, arg ? decodeURIComponent(arg) : null);
-    // 导航高亮
-    TR.$$("[data-nav]").forEach((a) => a.classList.toggle("on", a.dataset.nav === v));
+    // 导航高亮 + aria-current（屏读播报当前页）
+    TR.$$("[data-nav]").forEach((a) => {
+      const on = a.dataset.nav === v;
+      a.classList.toggle("on", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
     // 回到顶部（档案页从头读）
     window.scrollTo(0, 0);
   }
@@ -171,6 +175,12 @@
     if (TR.fx && TR.fx.lightCeremony) TR.fx.lightCeremony(e.currentTarget, toDark);   // 点灯仪式：日落月升+星子
     TR.switchTheme(() => { TR.state.settings.theme = toDark ? "dark" : "light"; TR.persist(); }, e.currentTarget);
   });
+
+  /* ---------- 跳到主内容（WCAG 2.4.1 Bypass Blocks）：hash 路由下手动移焦，避免 #view 被当路由 ---------- */
+  (function () {
+    const sk = TR.$("#skipLink");
+    if (sk) sk.addEventListener("click", (e) => { e.preventDefault(); const m = TR.$("#view"); if (m) { m.setAttribute("tabindex", "-1"); m.focus(); } });
+  })();
 
   /* ---------- 键盘：readonly 的选择器输入用 Enter/Space 打开（click 不会被键盘触发） ---------- */
   document.addEventListener("keydown", (e) => {
