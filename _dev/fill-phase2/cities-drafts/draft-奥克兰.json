@@ -1,0 +1,487 @@
+{
+ "deep": {
+  "taglines": [
+   "南半球的帆船之都（City of Sails）",
+   "天空塔 + 双海港（Waitematā + Manukau）",
+   "48 座火山锥上的城市",
+   "全球最大的波利尼西亚城市",
+   "怀赫科岛葡萄酒庄 + 海滩",
+   "pōhutukawa 圣诞红 · 盛夏过圣诞",
+   "flat white 澳白咖啡文化（与澳洲之争）",
+   "毛利文化 + 太平洋岛民熔炉",
+   "Rangitoto 火山 + 豪拉基湾观鲸豚",
+   "通往新西兰的北岛门户"
+  ],
+  "highlights2": [
+   "天空塔（Sky Tower · 328 m · 南半球最高独立建筑之一 · SkyJump/SkyWalk）",
+   "Viaduct Harbour 高架桥海港（游艇码头 + 美洲杯赛场 + 餐饮夜景）",
+   "温亚德码头区（Wynyard Quarter · Silo Park + 奥克兰鱼市场 + 露天活动）",
+   "奥克兰海港大桥（Harbour Bridge · 可攀爬 + 蹦极）",
+   "伊甸山 / Maungawhau（Mt Eden · 196 m 火山口 · 全城最高点 · 360° 视野）",
+   "独树山 + 康沃尔公园（One Tree Hill/Maungakiekie · 绵羊草坡 + 方尖碑 + 樱花）",
+   "奥克兰战争纪念博物馆（War Memorial Museum · Domain 内 · 毛利文化 + haka 表演）",
+   "奥克兰博物馆冬季花园（Wintergarden · 维多利亚式玻璃温室）",
+   "奥克兰美术馆 Toi o Tāmaki（南半球重要美术馆之一 · 免费常设展）",
+   "朗伊托托岛（Rangitoto · 约 600 年火山 · 渡轮 25 分钟 · 熔岩 + pōhutukawa 林 · 登顶看湾）",
+   "怀赫科岛（Waiheke · 渡轮 40 分钟 · 葡萄酒庄 + 海滩 + 艺术小镇）",
+   "德文波特（Devonport · 渡轮 12 分钟 · 维多利亚式海滨老镇 + North Head/Mt Victoria 观景）",
+   "凯利塔顿海底世界（Kelly Tarlton's SEA LIFE · 企鹅 + 鲨鱼海底隧道）",
+   "奥克兰动物园（Auckland Zoo · Western Springs · kiwi 夜行馆）",
+   "交通科技博物馆 MOTAT（老电车 + 蒸汽机 + 飞行馆）",
+   "使命湾（Mission Bay · 东海岸海滩 + Tamaki Drive 海滨步道 + gelato）",
+   "皮哈黑沙滩（Piha · 西海岸冲浪圣地 + Lion Rock · 离岸流危险）",
+   "穆里怀塘鹅栖息地（Muriwai · 黑沙滩 + 断崖塘鹅群俯冲入海）",
+   "怀塔克雷山脉（Waitākere Ranges · 雨林 + 瀑布 · 部分步道因贝壳杉枯萎病封闭）",
+   "帕内尔（Parnell · 奥克兰最古老街区 + 玫瑰花园 + 圣三一大教堂）",
+   "庞森比（Ponsonby · 时尚餐饮 + 维多利亚老别墅 + 周末市集）",
+   "卡朗加哈佩路（K Road/Karangahape · 文艺小店 + 夜生活 + 涂鸦）",
+   "布里托马特（Britomart · 老仓库改造街区 + 精品餐饮 + 交通枢纽）",
+   "奥塔拉市集（Ōtara Market · 周六 · 太平洋岛民集市 + 平价美食）",
+   "蒂里蒂里马唐伊岛（Tiritiri Matangi · 开放式鸟类保护区 · takahē/kiwi · 需订渡轮）",
+   "伊甸公园（Eden Park · 国家级橄榄球/板球主场）",
+   "霍比屯（Hobbiton · Matamata 近郊 · 车程约 2 小时 · 《指环王》外景一日游）",
+   "怀托摩萤火虫洞（Waitomo Glowworm Caves · 车程约 2.5 小时 · 洞穴漂流看萤光）",
+   "科罗曼德半岛（Coromandel · Hot Water Beach 温泉沙滩 + Cathedral Cove 海蚀洞 · 一至二日游）",
+   "豪拉基湾海洋公园（Hauraki Gulf · 观鲸豚船 · 布氏鲸常年 + 普通海豚）"
+  ],
+  "mustEat2": [
+   "Flat White 澳白（新西兰与澳洲争发源的国民咖啡 · 精品咖啡文化浓）",
+   "绿唇贻贝（Green-lipped Mussels · 新西兰特产 · 白葡萄酒蒸 / 炸）",
+   "炸鱼薯条（Fish & Chips · 海滩边现炸 · snapper/hoki 最常见）",
+   "银鱼煎饼（Whitebait Fritter · 白鲦鱼裹蛋煎 · 春季时令 · 价高）",
+   "布拉夫生蚝（Bluff Oysters · 南部深水生蚝 · 约 3-8 月时令）",
+   "帕芙洛娃（Pavlova · 蛋白霜蛋糕 + 奇异果草莓 + 奶油 · 澳新之争甜点）",
+   "Hokey Pokey 冰淇淋（蜂窝糖香草 · 国民口味）",
+   "L&P 汽水（Lemon & Paeroa · 柠檬汽水 · 'World famous in New Zealand'）",
+   "毛利石蒸 Hāngī（地窖热石慢烤羊肉 + kumara · 需 marae / 文化村体验）",
+   "Kumara 甘薯（毛利主食 · 薯条 / 烤 · 常配羊排）",
+   "新西兰草饲羊排 + 鹿肉（Venison · 世界级牧场肉）",
+   "鲷鱼 Snapper + 岩龙虾 crayfish/kōura（本地代表海产）",
+   "肉派 Meat Pie（mince & cheese · 国民快餐 · 加油站也有）",
+   "麦卢卡蜂蜜 Mānuka Honey（本地特产 · 送礼热门）",
+   "Anzac 饼干（燕麦椰蓉饼 · 纪念日糕点）",
+   "Whittaker's 巧克力 + Pineapple Lumps 菠萝软糖（超市国民零食）",
+   "费约果 Feijoa + 奇异果 Kiwifruit（秋季本地水果）",
+   "太平洋岛民美食（umu 地烤 + taro 芋头 + palusami 椰浆芋叶 + 烤乳猪 · 奥塔拉/太平洋区）",
+   "Dominion Road 亚洲面食（上海小笼包 + 各式饺子 + 拉面 · 华人多）",
+   "饮茶 Yum Cha（粤式点心 + 烤鸭 · 奥克兰华人聚居）",
+   "印度菜（Sandringham 印度街 · 咖喱 + dosa）+ 韩国烤肉",
+   "怀赫科红酒 + 马尔堡长相思白（Marlborough Sauvignon Blanc · NZ 名产）",
+   "精酿啤酒（本地 craft beer 兴盛 · Ponsonby/K Road 酒馆）",
+   "澳式早午餐（碎牛油果吐司 + 水波蛋 + 长黑咖啡）",
+   "BBQ 香肠面包（Sausage Sizzle · 超市/五金店门口国民小吃）",
+   "盛夏芒果与本地夏季水果（圣诞季当造）"
+  ],
+  "localFav": [
+   "周末坐渡轮去德文波特 / 怀赫科，一张 AT HOP 卡看遍双海港",
+   "黄昏爬火山锥看日落：伊甸山 / 独树山 / 德文波特 Mt Victoria",
+   "夏天沿 Tamaki Drive 海滨骑行到 Mission Bay / St Heliers 野餐游泳",
+   "周六赶农夫市集：奥塔拉（太平洋风）/ La Cigale（法式）/ 近郊 Matakana",
+   "西海岸黑沙滩 Piha 冲浪（但认准红黄旗、警惕离岸流）",
+   "咖啡馆坐一上午点 flat white 不加糖（本地几乎没有星巴克氛围）",
+   "BYO 餐厅自带酒水 + 公园免费公共 BBQ 炉自烤",
+   "Dominion Road 吃亚洲宵夜 · 一条街吃遍中日韩",
+   "看橄榄球：Eden Park 的 All Blacks / Blues 主场之夜",
+   "夏季黄昏去 Wynyard Silo Park 看露天电影 / 集市",
+   "Matariki 毛利新年冬夜观星 + 围炉 hāngī",
+   "周末远行：怀赫科酒庄 / 科罗曼德 Hot Water Beach 挖温泉坑"
+  ],
+  "oldShops": [
+   "Farmers（据称 1909 起家于奥克兰的老牌连锁百货）",
+   "Smith & Caughey's（据称 1880 · 皇后街百年百货 · 近年经营收缩，行前请查营业状态）",
+   "The Civic 市政剧院（1929 · 星空穹顶氛围影院 · 历史地标）",
+   "渡轮大楼 Ferry Building（1912 · 爱德华式红砖海港地标 · 餐饮）",
+   "Vulcan Lane 火神巷（CBD 历史步行小巷 + Occidental 等老啤酒馆）",
+   "St Kevin's Arcade（1920 年代 · K Road 历史拱廊 + 老咖啡店）"
+  ],
+  "smallStreets": [
+   "Vulcan Lane 火神巷（CBD 鹅卵石步行巷 + 老酒馆）",
+   "High Street / Lorne Street（CBD 精品 + 独立咖啡）",
+   "Britomart 布里托马特（老仓库街区 + 餐饮设计店）",
+   "Ponsonby Road 庞森比路（时尚餐饮 + 周末市集）",
+   "K Road / Karangahape 卡朗加哈佩路（文艺小店 + 夜生活）",
+   "Parnell Road 帕内尔路（最古老街区 + 精品 + 玫瑰园）",
+   "Dominion Road 多米尼恩路（亚洲美食一条街 · 饺子小笼）",
+   "Sandringham（印度美食街 · 咖喱与甜品）",
+   "Devonport Victoria Road（海滨老镇步行街 + 老书店）",
+   "Federal Street（SkyCity 旁美食街 · fine dining 集中）",
+   "Wynyard Quarter North Wharf（海滨餐饮步道）",
+   "Onehunga / Mount Eden Village（本地生活老街区）"
+  ],
+  "phenology": [
+   {
+    "name": "pōhutukawa 圣诞树（红花）",
+    "icon": "🌺",
+    "when": "12 月 - 1 月（盛夏圣诞）",
+    "where": "海岸线、Tamaki Drive、Rangitoto、Mission Bay"
+   },
+   {
+    "name": "樱花（Cherry Blossom）",
+    "icon": "🌸",
+    "when": "9 月中 - 10 月初（约 4 周）",
+    "where": "康沃尔公园 Pōhutukawa/Pūriri Drive、Auckland Domain"
+   },
+   {
+    "name": "kōwhai 黄花（NZ 象征花）",
+    "icon": "💛",
+    "when": "7 - 11 月（招引 tūī 蜜雀）",
+    "where": "各大公园与花园、植物园"
+   },
+   {
+    "name": "蓝花楹（Jacaranda）",
+    "icon": "💜",
+    "when": "11 月前后",
+    "where": "帕内尔与东郊部分街道（据称，规模不及悉尼）"
+   },
+   {
+    "name": "玫瑰（Parnell Rose Gardens）",
+    "icon": "🌹",
+    "when": "11 月（帕内尔玫瑰花节）",
+    "where": "Parnell Rose Gardens"
+   },
+   {
+    "name": "秋色红叶",
+    "icon": "🍂",
+    "when": "4 - 5 月（南半球秋）",
+    "where": "康沃尔公园、Auckland Domain 落叶乔木"
+   },
+   {
+    "name": "布氏鲸 + 普通海豚（豪拉基湾）",
+    "icon": "🐋",
+    "when": "常年可见（观豚船易遇）",
+    "where": "豪拉基湾 Hauraki Gulf"
+   },
+   {
+    "name": "澳洲塘鹅繁殖（Gannet）",
+    "icon": "🐦",
+    "when": "8 月 - 次年 3 月（约 1200 对）",
+    "where": "穆里怀 Muriwai 断崖栖息地"
+   },
+   {
+    "name": "蝉鸣（盛夏之声）",
+    "icon": "🦗",
+    "when": "12 - 2 月（盛夏）",
+    "where": "城郊林地与公园"
+   },
+   {
+    "name": "银蕨与雨林蕨类",
+    "icon": "🌿",
+    "when": "常年（雨林葱郁）",
+    "where": "怀塔克雷山脉 Waitākere（注意步道封闭）"
+   },
+   {
+    "name": "mānuka / kānuka 花（蜜源）",
+    "icon": "🌼",
+    "when": "春末 - 初夏（约 10-12 月）",
+    "where": "灌木林与郊野"
+   },
+   {
+    "name": "费约果与奇异果收成",
+    "icon": "🥝",
+    "when": "3 - 5 月（秋）",
+    "where": "近郊果园与农夫市集"
+   }
+  ],
+  "wildlife": [
+   {
+    "name": "tūī 图伊蜜雀",
+    "icon": "🐦",
+    "where": "公园 / 花园 / 有 kōwhai/pōhutukawa 处",
+    "tip": "喉下两簇白毛易认，叫声机械怪异，春季吸花蜜最活跃"
+   },
+   {
+    "name": "kererū 新西兰鸠",
+    "icon": "🕊",
+    "where": "林地 / 郊野公园",
+    "tip": "又大又胖的绿铜色木鸽，吃发酵果子会'醉'到踉跄，别惊扰"
+   },
+   {
+    "name": "pūkeko 紫水鸡",
+    "icon": "🐔",
+    "where": "湿地 / 路边草地 / 高速旁",
+    "tip": "蓝黑羽 + 红额 + 红脚，常见但过马路慢，开车留意"
+   },
+   {
+    "name": "pīwakawaka 扇尾鹟",
+    "icon": "🐦",
+    "where": "步道 / 花园",
+    "tip": "小扇尾会绕着你飞捕你惊起的虫，别以为在攻击你"
+   },
+   {
+    "name": "kororā 小蓝企鹅",
+    "icon": "🐧",
+    "where": "海岸 / 码头岩缝（黄昏归巢）",
+    "tip": "世界最小企鹅，黄昏上岸，勿用灯直照或靠近巢穴"
+   },
+   {
+    "name": "澳洲塘鹅 Gannet",
+    "icon": "🐦",
+    "where": "穆里怀 Muriwai 断崖（8 月-次年 3 月）",
+    "tip": "观景台近距离看俯冲入海，别越护栏惊扰"
+   },
+   {
+    "name": "kekeno 新西兰毛皮海狮",
+    "icon": "🦭",
+    "where": "岩岸 / 防波堤晒太阳",
+    "tip": "受保护，至少保持 20 米，别挡它回海的路"
+   },
+   {
+    "name": "kiwi 几维鸟（国鸟）",
+    "icon": "🥝",
+    "where": "夜行馆 / Tiritiri Matangi 等保护区",
+    "tip": "野生难见且夜行，动物园夜行馆或保护区夜观最实际"
+   }
+  ],
+  "seasons": [
+   {
+    "month": "1月",
+    "icon": "⛵",
+    "what": "奥克兰纪念日周末（月底 · 海港帆船赛 Regatta）· ASB Classic 网球 · 盛夏海滩季"
+   },
+   {
+    "month": "2月",
+    "icon": "🏮",
+    "what": "灯节 Lantern Festival（农历新年 · Auckland Domain）· Waitangi Day 2.6 建国日 · Splore 音乐节"
+   },
+   {
+    "month": "3月",
+    "icon": "🌺",
+    "what": "Pasifika 太平洋文化节（Western Springs · 全球最大太平洋岛民节之一）· 奥克兰艺术节 · Round the Bays 长跑"
+   },
+   {
+    "month": "4月",
+    "icon": "🌅",
+    "what": "ANZAC Day 4.25 黎明纪念 · 秋高气爽 · 月初夏令时结束（时钟拨慢）"
+   },
+   {
+    "month": "5月",
+    "icon": "🍂",
+    "what": "深秋渐凉 · 奥克兰作家节 · Restaurant Month 美食月前奏 · 室内展馆季"
+   },
+   {
+    "month": "6月",
+    "icon": "✨",
+    "what": "Matariki 毛利新年（观星 + hāngī · 公共假日）· 入冬多雨 · 冬季灯光/美食活动"
+   },
+   {
+    "month": "7月",
+    "icon": "🌧",
+    "what": "隆冬 · 全年最湿冷（仍温和少低于 5°C）· 博物馆 / 温泉 / Christmas in July 室内季"
+   },
+   {
+    "month": "8月",
+    "icon": "🌼",
+    "what": "冬末 · kōwhai 黄花开 + 塘鹅育雏 · 春意萌动 · 冬末美食周"
+   },
+   {
+    "month": "9月",
+    "icon": "🌸",
+    "what": "入春 · 康沃尔公园樱花（月中起）+ kōwhai · 月底夏令时开始（时钟拨快）"
+   },
+   {
+    "month": "10月",
+    "icon": "🪔",
+    "what": "春暖 · Diwali 排灯节（Aotea Square/Queen St · 月底）· 春季赛事季"
+   },
+   {
+    "month": "11月",
+    "icon": "🌹",
+    "what": "暮春 · 帕内尔玫瑰花节 + 蓝花楹 · 夏季海滩前奏"
+   },
+   {
+    "month": "12月",
+    "icon": "🎆",
+    "what": "盛夏过圣诞（pōhutukawa 红满城）· Christmas in the Park 音乐会 · 天空塔跨年烟花"
+   }
+  ],
+  "radar": {
+   "quickGlance": {
+    "title": "奥克兰 · 速览",
+    "subtitle": "南半球的帆船之都 · 火山、双海港与波利尼西亚熔炉",
+    "bullets": [
+     "推荐天数：3-5 天（加怀赫科酒庄 +1 天、加霍比屯 + 萤火虫洞 +1 天、加科罗曼德 +1-2 天）",
+     "气候舒适期：11-12 月与 2-4 月（暖而不酷）；1-2 月盛夏海滩季，6-8 月冬季温和多雨（7 月最湿）",
+     "季节相反：南半球圣诞是盛夏、7 月最冷但很少低于 5°C，行李按反季带",
+     "代表体验：天空塔看双海港 · 渡轮去怀赫科/德文波特 · 爬火山锥看日落 · 豪拉基湾观鲸豚",
+     "签到点：pōhutukawa 圣诞红、Rangitoto 火山剪影、伊甸山火山口全景",
+     "适合：第一次玩新西兰的北岛门户 · 海港与酒庄控 · 亲子（企鹅/几维鸟）· 咖啡美食家"
+    ],
+    "tags": [
+     "帆船之都",
+     "火山",
+     "双海港",
+     "波利尼西亚",
+     "怀赫科酒庄",
+     "咖啡",
+     "pōhutukawa"
+    ]
+   },
+   "travel": {
+    "fromTransport": "奥克兰机场（AKL）在市区以南约 21 km；SkyDrive 快线直达 SkyCity 市中心约 35-45 分钟（约 NZ$18）；AirportLink 巴士接 Puhinui 站转火车进 Britomart 约 65-85 分钟（含换乘）；出租 / 网约约 NZ$70-90。是新西兰最大国际枢纽，有中国直飞航线",
+    "cityTransport": "AT HOP 卡通用巴士 + 火车 + 渡轮，上下车 tap on/off 按距离计费、有每日封顶；部分线路已可直接刷 Visa/Mastercard 闪付；渡轮既是通勤也是最美观光线（德文波特 / 怀赫科 / Rangitoto）；右舵左行，过马路先看右；CBD 景点多可步行",
+    "stayZones": [
+     {
+      "name": "CBD / Viaduct + Britomart",
+      "vibe": "首来首选：天空塔 + 渡轮码头步行可达，热闹价高"
+     },
+     {
+      "name": "Ponsonby / K Road",
+      "vibe": "文艺餐饮夜生活 + 维多利亚老别墅，年轻有个性"
+     },
+     {
+      "name": "Parnell / Newmarket",
+      "vibe": "最古老街区 + 购物，靠博物馆与 Domain，安静有格调"
+     },
+     {
+      "name": "德文波特 / 东海岸 Mission Bay",
+      "vibe": "渡轮海滨老镇或海滩生活，看海安静，通勤稍远"
+     }
+    ],
+    "tips": [
+     "落地先在机场买 AT HOP 卡（约 NZ$5 + 充值）或直接用 Visa/Mastercard 闪付；三四人到市区打车可分摊更划算",
+     "自来水可直饮，带保温杯；紫外线极强（南半球臭氧偏薄，UV 全球最高之一），四季都要 Slip-Slop-Slap 防晒",
+     "很多小馆是 BYO（自带酒水），买瓶葡萄酒去省酒钱",
+     "插头为八字三脚（I 型，同澳洲），电压 230V，带转换头",
+     "时差：奥克兰比北京早 4 小时（冬令 NZST）/ 5 小时（10 月-次年 4 月夏令 NZDT）",
+     "生物安检极严：肉类 / 奶制品 / 蜂蜜 / 种子 / 木制品 / 沾泥的户外鞋帐篷必须申报，不确定就申报，罚款 NZ$400 起",
+     "天气'一日四季'多变，随身带轻便雨衣防风外套；西海岸黑沙滩风大浪急"
+    ]
+   },
+   "tips": {
+    "avoid": [
+     "西海岸黑沙滩（Piha / Muriwai / Karekare）离岸流每年溺人，务必在红黄旗之间下水、别逞强游远",
+     "K Road 深夜有成人娱乐区与醉客，财物看好、避免卷入冲突",
+     "喂食海鸥 / 塘鹅 / pūkeko 会被围抢，野餐看好食物",
+     "怀塔克雷 Waitākere 部分步道因贝壳杉枯萎病（kauri dieback）封闭，进山要按指示刷鞋消毒、别踩树根",
+     "租车注意左行 + 部分乡道为砾石路 / 单车道桥；CBD 停车费很贵，市区尽量公共交通",
+     "近海岩岸的毛皮海狮受保护，别靠近合影或投喂"
+    ],
+    "etiquette": [
+     "签证：中国护照赴新西兰旅游须提前申请访客签证（Visitor Visa，线上办理）；NZeTA 仅适用于免签国家或经澳大利亚入境的特定试点，直接从中国前往不适用",
+     "货币：新西兰元（NZD / 纽币），高度无现金化，刷卡 / 闪付 / 手机全通，小费非惯例（GST 15% 已含在标价内）",
+     "礼俗：毛利文化受尊重，进 marae 会堂 / 民宅先脱鞋，见面可行 hongi 碰鼻礼；排队守序、下公交对司机道谢、环保意识强",
+     "语言：英语与毛利语 te reo Māori 为官方语言，常用问候 Kia ora；亚裔移民多，唐人街与商圈中文标识常见"
+    ]
+   },
+   "inspiration": {
+    "locals": [
+     "周末坐渡轮去德文波特爬 Mt Victoria，或去怀赫科泡酒庄看海",
+     "黄昏爬伊甸山 / 独树山看火山口与全城日落（步行免费）",
+     "沿 Tamaki Drive 海滨骑行到 Mission Bay / St Heliers 野餐游泳",
+     "周六赶奥塔拉市集（太平洋风味）或 La Cigale 法式农夫市集觅食"
+    ],
+    "hidden": [
+     "蒂里蒂里马唐伊岛（Tiritiri Matangi）开放式鸟岛看 takahē / kiwi，需提前订渡轮",
+     "西海岸 Karekare（《钢琴课》取景地）黑沙滩 + 瀑布，人少静谧",
+     "穆里怀 Muriwai 断崖近距离看塘鹅群俯冲入海",
+     "Wynyard Silo Park 夏季黄昏露天电影 + 海滨集市"
+    ],
+    "routes": [
+     "Day1：天空塔 + Viaduct/Wynyard 海港 + 奥克兰博物馆（Domain · 毛利 haka 表演）+ 伊甸山火山口看落日",
+     "Day2：渡轮去怀赫科岛酒庄 + 海滩 + 艺术，或渡轮登 Rangitoto 火山徒步看湾",
+     "Day3（近郊）：霍比屯 + 怀托摩萤火虫洞一日游，或科罗曼德 Hot Water Beach 挖温泉 + Cathedral Cove"
+    ]
+   }
+  }
+ },
+ "climate": {
+  "1月": {
+   "iconSet": ["☀", "🌤", "⛅", "🌧", "☀"],
+   "condSet": ["晴暖", "转晴", "多云", "阵雨", "晴"],
+   "tempBase": [17, 24],
+   "tempVar": 2
+  },
+  "2月": {
+   "iconSet": ["☀", "🌤", "🌧", "⛅", "☀"],
+   "condSet": ["晴热", "转晴", "阵雨", "多云", "晴"],
+   "tempBase": [17, 24],
+   "tempVar": 2
+  },
+  "3月": {
+   "iconSet": ["🌤", "☀", "🌧", "⛅", "🌤"],
+   "condSet": ["温暖", "晴", "阵雨", "多云", "初秋"],
+   "tempBase": [16, 22],
+   "tempVar": 2
+  },
+  "4月": {
+   "iconSet": ["🍂", "🌤", "🌧", "☀", "⛅"],
+   "condSet": ["秋爽", "转晴", "阵雨", "晴", "多云"],
+   "tempBase": [13, 20],
+   "tempVar": 2
+  },
+  "5月": {
+   "iconSet": ["🍂", "🌧", "⛅", "🌤", "☁"],
+   "condSet": ["深秋", "小雨", "多云", "转晴", "阴"],
+   "tempBase": [11, 17],
+   "tempVar": 2
+  },
+  "6月": {
+   "iconSet": ["🌧", "☁", "🌬", "🌦", "🌧"],
+   "condSet": ["湿冷", "阴", "多风", "阵雨", "中雨"],
+   "tempBase": [9, 15],
+   "tempVar": 2
+  },
+  "7月": {
+   "iconSet": ["🌧", "🌬", "☁", "🌦", "🌧"],
+   "condSet": ["最湿冷", "风雨", "阴", "阵雨", "大雨"],
+   "tempBase": [8, 14],
+   "tempVar": 2
+  },
+  "8月": {
+   "iconSet": ["🌦", "🌤", "🌧", "🌼", "☁"],
+   "condSet": ["冬末", "转晴", "阵雨", "kōwhai开", "多云"],
+   "tempBase": [8, 15],
+   "tempVar": 2
+  },
+  "9月": {
+   "iconSet": ["🌸", "🌤", "🌬", "🌧", "☀"],
+   "condSet": ["初春", "转晴", "春风", "阵雨", "晴"],
+   "tempBase": [10, 16],
+   "tempVar": 2
+  },
+  "10月": {
+   "iconSet": ["🌸", "☀", "🌧", "🌤", "⛅"],
+   "condSet": ["春暖", "晴", "春雨", "转晴", "多云"],
+   "tempBase": [11, 18],
+   "tempVar": 2
+  },
+  "11月": {
+   "iconSet": ["🌹", "☀", "🌤", "🌧", "⛅"],
+   "condSet": ["暮春", "晴", "转晴", "阵雨", "多云"],
+   "tempBase": [13, 20],
+   "tempVar": 2
+  },
+  "12月": {
+   "iconSet": ["☀", "🌺", "🌤", "🌧", "☀"],
+   "condSet": ["初夏", "圣诞花", "转晴", "阵雨", "晴"],
+   "tempBase": [15, 22],
+   "tempVar": 2
+  }
+ },
+ "budget": {
+  "经济": {
+   "stay": 450,
+   "food": 200,
+   "fun": 150,
+   "trans": 80,
+   "bigTrans": 5000,
+   "misc": 100
+  },
+  "中端": {
+   "stay": 1200,
+   "food": 400,
+   "fun": 350,
+   "trans": 130,
+   "bigTrans": 6500,
+   "misc": 180
+  },
+  "品质": {
+   "stay": 3000,
+   "food": 800,
+   "fun": 700,
+   "trans": 200,
+   "bigTrans": 10000,
+   "misc": 350
+  }
+ }
+}
