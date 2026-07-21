@@ -1,0 +1,681 @@
+[
+{
+"id": "漳州",
+"region": "华南",
+"province": "福建",
+"intl": false,
+"type": "city"
+},
+{
+"id": "秦皇岛",
+"region": "华北",
+"province": "河北",
+"intl": false,
+"type": "city"
+},
+{
+"id": "保定",
+"region": "华北",
+"province": "河北",
+"intl": false,
+"type": "city"
+},
+{
+"id": "唐山",
+"region": "华北",
+"province": "河北",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "包头",
+"region": "华北",
+"province": "内蒙古",
+"intl": false,
+"type": "city"
+},
+{
+"id": "额济纳",
+"region": "华北",
+"province": "内蒙古",
+"intl": false,
+"type": "city"
+},
+{
+"id": "郑州",
+"region": "华中",
+"province": "河南",
+"intl": false,
+"type": "city"
+},
+{
+"id": "宜昌",
+"region": "华中",
+"province": "湖北",
+"intl": false,
+"type": "city"
+},
+{
+"id": "恩施",
+"region": "华中",
+"province": "湖北",
+"intl": false,
+"type": "city"
+},
+{
+"id": "岳阳",
+"region": "华中",
+"province": "湖南",
+"intl": false,
+"type": "city"
+},
+{
+"id": "井冈山",
+"region": "华中",
+"province": "江西",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "珠海",
+"region": "华南",
+"province": "广东",
+"intl": false,
+"type": "city"
+},
+{
+"id": "佛山",
+"region": "华南",
+"province": "广东",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "阳江",
+"region": "华南",
+"province": "广东",
+"intl": false,
+"type": "city"
+},
+{
+"id": "惠州",
+"region": "华南",
+"province": "广东",
+"intl": false,
+"type": "city"
+},
+{
+"id": "北海",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "南宁",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "柳州",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "崇左",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "百色",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "河池",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "贺州",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "钦州",
+"region": "华南",
+"province": "广西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "海口",
+"region": "海岛",
+"province": "海南",
+"intl": false,
+"type": "city"
+},
+{
+"id": "峨眉山",
+"region": "西南",
+"province": "四川",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "稻城亚丁",
+"region": "西南",
+"province": "四川",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "康定",
+"region": "西南",
+"province": "四川",
+"intl": false,
+"type": "city"
+},
+{
+"id": "阆中",
+"region": "西南",
+"province": "四川",
+"intl": false,
+"type": "city"
+},
+{
+"id": "香格里拉",
+"region": "西南",
+"province": "云南",
+"intl": false,
+"type": "city"
+},
+{
+"id": "腾冲",
+"region": "西南",
+"province": "云南",
+"intl": false,
+"type": "city"
+},
+{
+"id": "遵义",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "镇远",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "黔东南",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "荔波",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "安顺",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "黔南",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "黔西南",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "毕节",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "铜仁",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "六盘水",
+"region": "西南",
+"province": "贵州",
+"intl": false,
+"type": "city"
+},
+{
+"id": "林芝",
+"region": "西北",
+"province": "西藏",
+"intl": false,
+"type": "city"
+},
+{
+"id": "日喀则",
+"region": "西北",
+"province": "西藏",
+"intl": false,
+"type": "city"
+},
+{
+"id": "咸阳",
+"region": "西北",
+"province": "陕西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "汉中",
+"region": "西北",
+"province": "陕西",
+"intl": false,
+"type": "city"
+},
+{
+"id": "青海湖",
+"region": "西北",
+"province": "青海",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "伊犁",
+"region": "西北",
+"province": "新疆",
+"intl": false,
+"type": "city"
+},
+{
+"id": "雪乡",
+"region": "东北",
+"province": "黑龙江",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "漠河",
+"region": "东北",
+"province": "黑龙江",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "长春",
+"region": "东北",
+"province": "吉林",
+"intl": false,
+"type": "city"
+},
+{
+"id": "长白山",
+"region": "东北",
+"province": "吉林",
+"intl": false,
+"type": "nature"
+},
+{
+"id": "丹东",
+"region": "东北",
+"province": "辽宁",
+"intl": false,
+"type": "city"
+},
+{
+"id": "台中",
+"region": "华东",
+"province": "台湾",
+"intl": false,
+"type": "city"
+},
+{
+"id": "台南",
+"region": "华东",
+"province": "台湾",
+"intl": false,
+"type": "city"
+},
+{
+"id": "高雄",
+"region": "华东",
+"province": "台湾",
+"intl": false,
+"type": "city"
+},
+{
+"id": "花莲",
+"region": "华东",
+"province": "台湾",
+"intl": false,
+"type": "city"
+},
+{
+"id": "吉隆坡",
+"region": "国际·亚洲",
+"province": "马来西亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "巴厘岛",
+"region": "国际·亚洲",
+"province": "印尼",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "迪拜",
+"region": "国际·亚洲",
+"province": "阿联酋",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "伦敦",
+"region": "国际·欧洲",
+"province": "英国",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "罗马",
+"region": "国际·欧洲",
+"province": "意大利",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "巴塞罗那",
+"region": "国际·欧洲",
+"province": "西班牙",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "阿姆斯特丹",
+"region": "国际·欧洲",
+"province": "荷兰",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "布拉格",
+"region": "国际·欧洲",
+"province": "捷克",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "维也纳",
+"region": "国际·欧洲",
+"province": "奥地利",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "苏黎世",
+"region": "国际·欧洲",
+"province": "瑞士",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "雷克雅未克",
+"region": "国际·欧洲",
+"province": "冰岛",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "圣托里尼",
+"region": "国际·欧洲",
+"province": "希腊",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "纽约",
+"region": "国际·美洲",
+"province": "美国",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "旧金山",
+"region": "国际·美洲",
+"province": "美国",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "洛杉矶",
+"region": "国际·美洲",
+"province": "美国",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "温哥华",
+"region": "国际·美洲",
+"province": "加拿大",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "墨西哥城",
+"region": "国际·美洲",
+"province": "墨西哥",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "悉尼",
+"region": "国际·大洋洲",
+"province": "澳大利亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "墨尔本",
+"region": "国际·大洋洲",
+"province": "澳大利亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "奥克兰",
+"region": "国际·大洋洲",
+"province": "新西兰",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "开罗",
+"region": "国际·非洲",
+"province": "埃及",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "开普敦",
+"region": "国际·非洲",
+"province": "南非",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "马拉喀什",
+"region": "国际·非洲",
+"province": "摩洛哥",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "丹巴",
+"region": "小众·国内",
+"province": "四川",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "扎尕那",
+"region": "小众·国内",
+"province": "甘肃",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "雨崩",
+"region": "小众·国内",
+"province": "云南",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "坝美",
+"region": "小众·国内",
+"province": "云南",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "年保玉则",
+"region": "小众·国内",
+"province": "青海",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "黔东南小寨",
+"region": "小众·国内",
+"province": "贵州",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "晋东南",
+"region": "小众·国内",
+"province": "山西",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "独山子大峡谷",
+"region": "小众·国内",
+"province": "新疆",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "沙湾古镇",
+"region": "小众·国内",
+"province": "广东",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "恩阳古镇",
+"region": "小众·国内",
+"province": "四川",
+"intl": false,
+"type": "niche"
+},
+{
+"id": "格鲁吉亚",
+"region": "小众·国际",
+"province": "格鲁吉亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "亚美尼亚",
+"region": "小众·国际",
+"province": "亚美尼亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "阿尔巴尼亚",
+"region": "小众·国际",
+"province": "阿尔巴尼亚",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "北马其顿",
+"region": "小众·国际",
+"province": "北马其顿",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "法罗群岛",
+"region": "小众·国际",
+"province": "丹麦法罗",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "亚速尔群岛",
+"region": "小众·国际",
+"province": "葡萄牙亚速尔",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "塔吉克斯坦",
+"region": "小众·国际",
+"province": "塔吉克斯坦",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "不丹",
+"region": "小众·国际",
+"province": "不丹",
+"intl": true,
+"type": "intl"
+},
+{
+"id": "琅勃拉邦",
+"region": "小众·国际",
+"province": "老挝",
+"intl": true,
+"type": "intl"
+}
+]
