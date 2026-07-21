@@ -1,0 +1,676 @@
+{
+ "deep": {
+  "taglines": [
+   "南半球的海港明珠",
+   "歌剧院 + 海港大桥",
+   "邦迪海滩冲浪",
+   "蓝花楹紫色春天",
+   "flat white 澳白咖啡文化",
+   "跨年烟花全球第一枪",
+   "Vivid 灯光节",
+   "多元移民美食大熔炉",
+   "阳光沙滩 + 海岸步道",
+   "考拉袋鼠与南半球阳光"
+  ],
+  "highlights2": [
+   "悉尼歌剧院（Sydney Opera House · 白帆世界遗产地标）",
+   "海港大桥（Harbour Bridge · 可攀爬 BridgeClimb）",
+   "环形码头（Circular Quay · 渡轮 + 歌剧院 + 大桥交汇枢纽）",
+   "岩石区（The Rocks · 1788 殖民起点老街 + 周末集市）",
+   "皇家植物园（Royal Botanic Garden · 麦考利夫人座椅看歌剧院大桥同框）",
+   "邦迪海滩（Bondi Beach · 冲浪 + 海崖泳池 Icebergs）",
+   "邦迪到库吉海岸步道（Bondi to Coogee Coastal Walk）",
+   "达令港（Darling Harbour · 海洋馆 + 野生动物园 + 博物馆区）",
+   "悉尼塔（Sydney Tower Eye · 全城最高观景台）",
+   "维多利亚女王大厦（QVB · 1898 罗马式购物廊）",
+   "海德公园（Hyde Park）+ 圣玛丽大教堂",
+   "新南威尔士州美术馆（Art Gallery of NSW）",
+   "当代艺术博物馆（MCA · 环形码头旁）",
+   "曼利海滩（Manly · 渡轮直达 + 海滨小镇 + The Corso）",
+   "屈臣氏湾（Watsons Bay · The Gap 断崖 + 海鲜）",
+   "塔龙加动物园（Taronga Zoo · 隔海港看考拉袋鼠）",
+   "达令赫斯特 + 国王十字（Kings Cross · 夜生活酒吧区）",
+   "帕丁顿（Paddington · 精品店 + 周六市集 + 联排老屋）",
+   "纽镇（Newtown · King St 涂鸦墙 + 独立小店 + 多元）",
+   "萨里山（Surry Hills · 咖啡馆 + 设计小店）",
+   "唐人街 + 海马克（Chinatown/Haymarket · 亚洲美食）",
+   "悉尼鱼市场（Sydney Fish Market · 南半球最大之一）",
+   "巴兰加鲁（Barangaroo · 新海滨 + 悉尼最高楼）",
+   "月神公园（Luna Park · 北岸大笑脸游乐场）",
+   "澳大利亚博物馆（Australian Museum · 自然史 + 原住民文化）",
+   "动力博物馆（Powerhouse Museum · 科技与设计）",
+   "达令港海洋馆 SEA LIFE + 野生动物园 WILD LIFE",
+   "麦考里角灯塔（Macquarie Lighthouse · 澳洲最早灯塔之一）",
+   "北头 North Head（步道看鲸 + 一战炮台遗迹）",
+   "蓝山（Blue Mountains · 三姐妹峰 + 卡通巴 · 一日游世界遗产）",
+   "科克图岛（Cockatoo Island · 船坞遗产岛 · 渡轮可达）",
+   "悉尼奥林匹克公园（2000 年奥运主场馆区）"
+  ],
+  "mustEat2": [
+   "Flat White 澳白（悉尼 / 墨尔本发源的国民咖啡 · 第三波精品）",
+   "牛油果吐司 + ricotta 松饼（Bills 发源的澳式 brunch 文化）",
+   "肉派 Meat Pie（Harry's Cafe de Wheels 的 'Tiger' 派 · 老虫派）",
+   "炸鱼薯条 Fish & Chips（海滩边现炸最香）",
+   "悉尼岩生蚝（Sydney Rock Oysters · 本地特产生蚝）",
+   "海鲜拼盘 + 莫顿湾虫虾（Moreton Bay Bugs）+ 大明虾（鱼市场现开）",
+   "澳洲和牛 + 炭火烧烤 BBQ（世界级牛肉产区）",
+   "香煎尖吻鲈 Barramundi（澳洲代表白身鱼）",
+   "袋鼠肉排 / 鸸鹋（Kangaroo · 尝鲜 native meat）",
+   "Lamington 拉明顿（椰蓉海绵蛋糕 · 国民甜点）",
+   "Pavlova 帕芙洛娃（蛋白霜蛋糕 · 澳新之争甜点）",
+   "Tim Tam 巧克力饼干（超市国民零食 · 玩 Tim Tam Slam）",
+   "维吉麦 Vegemite（咸酵母酱抹面包 · 猎奇必试）",
+   "澳式早午餐：碎牛油果 + 水波蛋 + 黑布丁 + 长黑咖啡",
+   "唐人街饮茶 Yum Cha（Emperor's Garden 1979 老店烤鸭 · 粤式点心）",
+   "越南牛肉粉 pho + 春卷（Cabramatta / Marrickville 越南区）",
+   "黎巴嫩烤肉 + 沙威玛（Lakemba 中东区）",
+   "希腊 + 意大利菜（Leichhardt 小意大利 Norton St）",
+   "韩国烤肉 + 炸鸡（Strathfield / Eastwood 韩国区）",
+   "Gelato + 意式冰淇淋（海滨 + Norton St）",
+   "Bondi 海边 acai bowl + 健康碗",
+   "精酿啤酒 + 澳洲葡萄酒（猎人谷 Hunter Valley 近在咫尺）",
+   "Halal Snack Pack（HSP · 薯条烤肉多元夜宵）",
+   "澳式烧烤香肠面包（Sausage Sizzle · Bunnings 门口国民小吃）",
+   "圣诞盛夏芒果与澳洲夏季水果",
+   "Barramundi / 生蚝配 Semillon（猎人谷白葡萄酒）"
+  ],
+  "localFav": [
+   "本地人周末泡海崖泳池：Bondi Icebergs / Bronte / Coogee 天然海水池",
+   "咖啡馆坐一上午，点 flat white 不加糖（悉尼咖啡文化，几乎没有星巴克气氛）",
+   "BYO 餐厅自带酒水（no-license 小馆 · 买瓶葡萄酒去省钱）",
+   "周六一早去鱼市场买生蚝大虾，坐码头现开现吃",
+   "坐渡轮当观光：Circular Quay → Manly，一张 Opal 票看遍海港",
+   "野餐 + 公共 BBQ 文化：植物园 / 公园草地自带烤肉（公共烧烤炉免费）",
+   "多元区觅食：越南 Cabramatta / 中东 Lakemba / 韩国 Strathfield",
+   "Newtown / Surry Hills 小酒馆（pub）喝一杯听现场乐队",
+   "周日农夫市集：Carriageworks / Marrickville 有机蔬果 + 咖啡",
+   "冬天去猎人谷 / 蓝山周末游，夏天北上中央海岸避暑",
+   "跨年占位 + Vivid 灯光节夜游（本地人也年年去）",
+   "清晨海岸步道跑步 / 冲浪一小时再上班"
+  ],
+  "oldShops": [
+   "David Jones（据称 1838 起 · 澳洲历史最久仍营业的百货）",
+   "维多利亚女王大厦 QVB（1898 建成 · 罗马式购物廊）",
+   "Strand Arcade（据称 1891 · 维多利亚式购物拱廊）",
+   "Harry's Cafe de Wheels（据称 1938 起 · Woolloomooloo 老虫派车摊）",
+   "Hero of Waterloo（据称 1843 · 岩石区老酒馆，'最老酒吧'之争者之一）",
+   "Fortune of War（据称 1828 · 岩石区老酒吧，同为'最老'争者）",
+   "Lord Nelson Brewery Hotel（据称 1841 · 岩石区老酿酒酒店）",
+   "Haigh's Chocolates（1915 起家于阿德莱德的老巧克力 · QVB / Strand 有店）",
+   "Emperor's Garden（1979 · 唐人街烤鸭 + 饮茶老店）"
+  ],
+  "smallStreets": [
+   "岩石区 The Rocks 鹅卵石巷 + 周末集市",
+   "帕丁顿 Paddington · Oxford St + William St 精品店 + 周六市集",
+   "纽镇 King Street · 涂鸦墙 + 古着 + 多元餐馆",
+   "萨里山 Surry Hills · Crown St + Bourke St 咖啡设计街",
+   "达令赫斯特 Darlinghurst · Victoria St 咖啡 + 彩虹街区",
+   "格利伯 Glebe · Glebe Point Rd + 周六集市 + 二手书",
+   "巴尔曼 Balmain · Darling St 半岛老村酒馆",
+   "曼利 The Corso 海滨步行街",
+   "唐人街 Dixon St 步行街 + 周五夜市",
+   "利卡特 Leichhardt · Norton St 小意大利",
+   "乌鲁木鲁 Woolloomooloo Finger Wharf 老码头餐饮",
+   "巴兰加鲁 Barangaroo 海滨步道 + King Street Wharf"
+  ],
+  "phenology": [
+   {
+    "name": "金合欢（Wattle 国花）",
+    "icon": "🌼",
+    "when": "8 - 9 月（冬末春初）",
+    "where": "蓝山、皇家国家公园灌木林"
+   },
+   {
+    "name": "奥本日本樱花",
+    "icon": "🌸",
+    "when": "8 月底 - 9 月（春）",
+    "where": "Auburn 植物园日本园"
+   },
+   {
+    "name": "帝王花（Waratah 新州州花）",
+    "icon": "🌺",
+    "when": "9 - 11 月（春）",
+    "where": "皇家国家公园、蓝山灌木林"
+   },
+   {
+    "name": "杜鹃 + 木兰",
+    "icon": "🌷",
+    "when": "9 - 10 月",
+    "where": "各大公园与东郊花园"
+   },
+   {
+    "name": "蓝花楹（Jacaranda）",
+    "icon": "🌸",
+    "when": "10 月中 - 11 月底（11 月初最盛）",
+    "where": "Kirribilli / McDougall St、悉尼大学、格利伯、主教座堂"
+   },
+   {
+    "name": "火焰木（Illawarra Flame Tree）",
+    "icon": "🌺",
+    "when": "11 - 12 月",
+    "where": "东郊街道与公园"
+   },
+   {
+    "name": "鸡蛋花（Frangipani）",
+    "icon": "🌸",
+    "when": "12 - 3 月（盛夏）",
+    "where": "东郊与海滨庭院"
+   },
+   {
+    "name": "新州圣诞灌木",
+    "icon": "🌿",
+    "when": "12 月（圣诞盛夏）",
+    "where": "灌木林与圣诞花市"
+   },
+   {
+    "name": "座头鲸迁徙（Humpback Whale）",
+    "icon": "🐋",
+    "when": "5 - 11 月（6-7 月北上 / 9-11 月南下带幼鲸）",
+    "where": "North Head、Cape Solander、邦迪断崖"
+   },
+   {
+    "name": "蝉鸣（盛夏之声）",
+    "icon": "🦗",
+    "when": "12 - 2 月（盛夏）",
+    "where": "城郊林地与公园"
+   },
+   {
+    "name": "秋色红叶",
+    "icon": "🍁",
+    "when": "4 - 5 月（南半球秋）",
+    "where": "蓝山 Mount Wilson / Leura 花园"
+   },
+   {
+    "name": "夏季芒果与热带水果",
+    "icon": "🥭",
+    "when": "12 - 2 月",
+    "where": "全城市集与鱼市场周边"
+   }
+  ],
+  "wildlife": [
+   {
+    "name": "笑翠鸟（Kookaburra）",
+    "icon": "🐦",
+    "where": "公园 / 植物园 / 郊野",
+    "tip": "清晨黄昏发出招牌大笑声，别投喂"
+   },
+   {
+    "name": "硫冠鹦鹉 + 彩虹吸蜜鹦鹉",
+    "icon": "🦜",
+    "where": "全城公园 + 阳台",
+    "tip": "成群极吵，别在阳台喂食否则被围攻"
+   },
+   {
+    "name": "澳洲白鹮（俗称 bin chicken）",
+    "icon": "🐦",
+    "where": "公园 / 垃圾桶 / 野餐区",
+    "tip": "会抢食，看好你的三明治"
+   },
+   {
+    "name": "刷尾负鼠（Brushtail Possum）",
+    "icon": "🐾",
+    "where": "夜晚公园 + 屋顶",
+    "tip": "夜行有袋类，别惊扰或投喂"
+   },
+   {
+    "name": "灰头狐蝠（果蝠）",
+    "icon": "🦇",
+    "where": "皇家植物园 / 百年公园黄昏",
+    "tip": "黄昏成千上万出巢，壮观但别站树下"
+   },
+   {
+    "name": "座头鲸（Humpback Whale）",
+    "icon": "🐋",
+    "where": "North Head / 邦迪断崖（5-11 月）",
+    "tip": "海岸步道即可远眺，或坐观鲸船"
+   },
+   {
+    "name": "小蓝企鹅（Little Penguin）",
+    "icon": "🐧",
+    "where": "曼利 North Head 受保护栖息地",
+    "tip": "澳洲最小企鹅，黄昏归巢，勿灯照打扰"
+   },
+   {
+    "name": "澳洲喜鹊（Magpie）",
+    "icon": "🐦",
+    "where": "公园 / 街道（9-11 月繁殖季）",
+    "tip": "春季护巢会俯冲啄人，戴帽或改道"
+   }
+  ],
+  "seasons": [
+   {
+    "month": "1月",
+    "icon": "☀",
+    "what": "悉尼艺术节（Sydney Festival 全月）· 澳大利亚日 1.26 国庆 · 渡轮赛 Ferrython · 盛夏海滩季"
+   },
+   {
+    "month": "2月",
+    "icon": "🏳️‍🌈",
+    "what": "Mardi Gras 同志狂欢节开幕（月中起）· 农历新年唐人街舞龙 · 全年最湿月"
+   },
+   {
+    "month": "3月",
+    "icon": "🎉",
+    "what": "Mardi Gras 大游行（牛津街 · 月初）· 皇家复活节农展会临近 · 初秋渐凉"
+   },
+   {
+    "month": "4月",
+    "icon": "🐑",
+    "what": "皇家复活节农展会 · ANZAC Day 4.25 黎明纪念 · 悉尼喜剧节 · 秋高气爽"
+   },
+   {
+    "month": "5月",
+    "icon": "💡",
+    "what": "Vivid Sydney 灯光节开幕（下旬）· 悉尼作家节 · 座头鲸北上季开始"
+   },
+   {
+    "month": "6月",
+    "icon": "❄",
+    "what": "Vivid 持续 + 悉尼电影节 · 入冬多雨 · 猎人谷 / 蓝山冬季美食节"
+   },
+   {
+    "month": "7月",
+    "icon": "🐋",
+    "what": "隆冬（全年最冷但温和）· 雪山滑雪 · 室内博物馆季 · 鲸鱼北上高峰"
+   },
+   {
+    "month": "8月",
+    "icon": "🏃",
+    "what": "冬末金合欢国花开 · City2Surf 海滩长跑（月中）· 春意萌动"
+   },
+   {
+    "month": "9月",
+    "icon": "🌸",
+    "what": "入春 + 帝王花 + 蓝花楹前奏 · 春季赛马嘉年华 · 鲸鱼南下带幼崽"
+   },
+   {
+    "month": "10月",
+    "icon": "💜",
+    "what": "蓝花楹紫色季开幕（月中）· Sculpture by the Sea 邦迪海边雕塑展 · 春暖"
+   },
+   {
+    "month": "11月",
+    "icon": "🌸",
+    "what": "蓝花楹满城最盛（月初）· 墨尔本杯赛马日全国氛围 · 夏季前奏"
+   },
+   {
+    "month": "12月",
+    "icon": "🎆",
+    "what": "盛夏海滩过圣诞 · 悉尼-霍巴特帆船赛 12.26 启航 · 跨年烟花全球第一枪"
+   }
+  ],
+  "radar": {
+   "quickGlance": {
+    "title": "悉尼 · 速览",
+    "subtitle": "南半球的海港明珠 · 歌剧院与冲浪海滩的阳光都市",
+    "bullets": [
+     "推荐天数：4-6 天（加蓝山 +1 天、加猎人谷酒庄 +1 天、加史蒂芬斯港看海豚 +1 天）",
+     "气候舒适期：9-11 月（春 · 蓝花楹）与 3-5 月（秋）；12-2 月盛夏炎热但海滩季，6-8 月冬季温和多雨",
+     "季节相反：南半球圣诞是盛夏、7 月最冷但很少低于 5°C，行李按反季带",
+     "代表体验：歌剧院 + 海港大桥合影 · 邦迪冲浪 + 海岸步道 · 渡轮去曼利 · 鱼市场生蚝",
+     "签到点：麦考利夫人座椅拍歌剧院大桥同框、Bondi Icebergs 彩虹泳池、跨年 / Vivid 夜景",
+     "适合：第一次出境长途 · 海滩控 · 亲子（动物园企鹅）· 咖啡美食家 · 几乎全年适宜"
+    ],
+    "tags": [
+     "歌剧院",
+     "海滩",
+     "蓝花楹",
+     "跨年烟花",
+     "咖啡",
+     "考拉袋鼠"
+    ]
+   },
+   "travel": {
+    "fromTransport": "金斯福德·史密斯机场（SYD）距市区约 8 km；机场线火车 T8 直达 CBD 约 13 分钟（含机场站附加费，单程约 AU$22）；出租 / 网约车约 AU$45-60。国内航线连墨尔本 / 布里斯班 / 凯恩斯等",
+    "cityTransport": "Opal 卡或直接刷银联 / Visa 闪付、手机 Pay，通用火车 + 新地铁 Metro + 巴士 + 轻轨 + 渡轮，上下车都要 tap on/off 按距离计费，有每日 / 每周封顶（周日全天封顶最划算）；渡轮既是通勤也是最美观光线；右舵左行，过马路先看右",
+    "stayZones": [
+     {
+      "name": "CBD / 环形码头（Circular Quay / The Rocks）",
+      "vibe": "首来首选：歌剧院大桥步行可达 + 渡轮枢纽，价高热闹"
+     },
+     {
+      "name": "达令港 / 巴兰加鲁（Darling Harbour / Barangaroo）",
+      "vibe": "海滨新区 + 博物馆水族馆，适合亲子，餐饮多"
+     },
+     {
+      "name": "邦迪 / 库吉海滩东郊（Bondi / Coogee）",
+      "vibe": "海滩控最爱：冲浪 + 海岸步道，离 CBD 约 30 分钟巴士"
+     },
+     {
+      "name": "萨里山 / 纽镇（Surry Hills / Newtown）",
+      "vibe": "文艺咖啡 + 小酒馆 + 多元餐饮，年轻性价比高"
+     },
+     {
+      "name": "北悉尼 / 曼利（North Sydney / Manly）",
+      "vibe": "过桥 / 渡轮的海滨生活，安静看海，通勤稍远"
+     }
+    ],
+    "tips": [
+     "落地先办 Opal 卡或直接用银联 / Visa 闪付；机场线有额外车站附加费，三四人可拼车分摊",
+     "机场到市区火车快但机场站附加费高（约 AU$17），人多打车更划算",
+     "小费非惯例，账单已含 10% GST，不用额外给（高档餐厅心意随意）",
+     "自来水可直饮，带保温杯；紫外线极强，一年四季防晒（Slip-Slop-Slap）",
+     "很多小馆是 BYO（自带酒水），买瓶葡萄酒去省酒钱",
+     "澳洲插头为八字三脚（I 型），带转换头；电压 230V",
+     "时差：悉尼比北京早 2 小时（冬令时）/ 3 小时（10 月-次年 4 月夏令时）",
+     "海关极严：肉类 / 奶制品 / 种子 / 木制品必须申报，不确定就申报，罚款很重"
+    ]
+   },
+   "tips": {
+    "avoid": [
+     "国王十字（Kings Cross）深夜酒吧区醉客多，财物看好、避免卷入冲突",
+     "海滩认准红黄旗之间下水（有救生员），离岸流（rip）每年溺人，别逞强游远",
+     "喂食海鸥 / 白鹮 / 鹦鹉会被成群围攻抢食，野餐看好食物",
+     "'免费'合影的假原住民表演 / 街头博彩，事后要钱，绕开",
+     "租车注意左行 + 严格限速测速多；City 停车费极贵，市区尽量公共交通",
+     "很多海滩 / 公园是 Alcohol-Free Zone 禁酒区，别在非指定区喝酒（罚款）"
+    ],
+    "etiquette": [
+     "签证：中国护照不能用 ETA / eVisitor，须提前申请 600 类访客签证（旅游流）",
+     "货币澳元（AUD），高度无现金化，刷卡 / 闪付 / 手机全通，小费非惯例",
+     "礼俗：排队守序、下车对公交司机说 thanks、开门帮后人扶一下；称呼随意 'G'day / mate'",
+     "语言英语（澳音 + 缩写多）；多元移民城市中文标识常见，唐人街普通话粤语通"
+    ]
+   },
+   "inspiration": {
+    "locals": [
+     "工作日清晨走 Bondi to Coogee 海岸步道（避周末人潮，顺路海崖泳池）",
+     "周六一早去悉尼鱼市场买生蚝大虾，坐码头现开现吃",
+     "黄昏去皇家植物园看果蝠出巢 + 麦考利夫人角拍歌剧院金光",
+     "周日坐渡轮去曼利，一张 Opal 封顶票看遍整个海港"
+    ],
+    "hidden": [
+     "科克图岛（Cockatoo Island）船坞遗产 + 露营，渡轮可达少游客",
+     "屈臣氏湾 The Gap 断崖看夕阳 + Doyles 老海鲜",
+     "北头 North Head 步道看鲸 + 一战炮台遗迹",
+     "内西区 Newtown / Enmore 涂鸦墙 + Live House 本地乐队之夜"
+    ],
+    "routes": [
+     "Day1：环形码头 + 歌剧院 + 海港大桥攀爬 + 岩石区集市 + 植物园看落日",
+     "Day2：邦迪冲浪 + 邦迪到库吉海岸步道 + 渡轮曼利 + 达令港夜景",
+     "Day3（近郊）：蓝山三姐妹峰 + 回音谷缆车，或猎人谷酒庄一日游"
+    ]
+   }
+  }
+ },
+ "climate": {
+  "1月": {
+   "iconSet": [
+    "☀",
+    "⛈",
+    "☀",
+    "🔥",
+    "🌤"
+   ],
+   "condSet": [
+    "晴热",
+    "雷阵雨",
+    "晴",
+    "酷热",
+    "转晴"
+   ],
+   "tempBase": [
+    19,
+    27
+   ],
+   "tempVar": 3
+  },
+  "2月": {
+   "iconSet": [
+    "⛈",
+    "🌧",
+    "☀",
+    "☁",
+    "⛈"
+   ],
+   "condSet": [
+    "雷雨",
+    "大雨",
+    "晴",
+    "多云",
+    "雷阵雨"
+   ],
+   "tempBase": [
+    18,
+    27
+   ],
+   "tempVar": 3
+  },
+  "3月": {
+   "iconSet": [
+    "🌤",
+    "☀",
+    "🌧",
+    "☁",
+    "☀"
+   ],
+   "condSet": [
+    "温暖",
+    "晴",
+    "阵雨",
+    "多云",
+    "晴"
+   ],
+   "tempBase": [
+    17,
+    25
+   ],
+   "tempVar": 3
+  },
+  "4月": {
+   "iconSet": [
+    "🍁",
+    "☀",
+    "🌧",
+    "🌤",
+    "☁"
+   ],
+   "condSet": [
+    "秋爽",
+    "晴",
+    "阵雨",
+    "转晴",
+    "多云"
+   ],
+   "tempBase": [
+    14,
+    22
+   ],
+   "tempVar": 3
+  },
+  "5月": {
+   "iconSet": [
+    "🍁",
+    "☀",
+    "☁",
+    "🌧",
+    "🌤"
+   ],
+   "condSet": [
+    "深秋",
+    "晴",
+    "多云",
+    "小雨",
+    "转晴"
+   ],
+   "tempBase": [
+    11,
+    19
+   ],
+   "tempVar": 3
+  },
+  "6月": {
+   "iconSet": [
+    "🌧",
+    "☁",
+    "🌧",
+    "☀",
+    "🌧"
+   ],
+   "condSet": [
+    "湿冷",
+    "阴",
+    "中雨",
+    "晴冷",
+    "小雨"
+   ],
+   "tempBase": [
+    9,
+    17
+   ],
+   "tempVar": 2
+  },
+  "7月": {
+   "iconSet": [
+    "☀",
+    "🌧",
+    "☁",
+    "☀",
+    "☁"
+   ],
+   "condSet": [
+    "晴冷",
+    "阵雨",
+    "阴",
+    "晴",
+    "多云"
+   ],
+   "tempBase": [
+    8,
+    16
+   ],
+   "tempVar": 2
+  },
+  "8月": {
+   "iconSet": [
+    "☀",
+    "🌼",
+    "☁",
+    "🌧",
+    "🌤"
+   ],
+   "condSet": [
+    "晴",
+    "金合欢开",
+    "多云",
+    "阵雨",
+    "转晴"
+   ],
+   "tempBase": [
+    9,
+    18
+   ],
+   "tempVar": 2
+  },
+  "9月": {
+   "iconSet": [
+    "🌸",
+    "☀",
+    "🌬",
+    "☁",
+    "🌤"
+   ],
+   "condSet": [
+    "春暖",
+    "晴",
+    "春风",
+    "多云",
+    "转晴"
+   ],
+   "tempBase": [
+    11,
+    20
+   ],
+   "tempVar": 3
+  },
+  "10月": {
+   "iconSet": [
+    "💜",
+    "☀",
+    "🌧",
+    "🌸",
+    "🌤"
+   ],
+   "condSet": [
+    "蓝花楹",
+    "晴",
+    "春雨",
+    "花季",
+    "转晴"
+   ],
+   "tempBase": [
+    13,
+    22
+   ],
+   "tempVar": 3
+  },
+  "11月": {
+   "iconSet": [
+    "🌸",
+    "☀",
+    "⛈",
+    "🌤",
+    "☁"
+   ],
+   "condSet": [
+    "暮春",
+    "晴",
+    "雷阵雨",
+    "转晴",
+    "多云"
+   ],
+   "tempBase": [
+    16,
+    24
+   ],
+   "tempVar": 3
+  },
+  "12月": {
+   "iconSet": [
+    "☀",
+    "⛈",
+    "🔥",
+    "🌤",
+    "☀"
+   ],
+   "condSet": [
+    "初夏",
+    "雷阵雨",
+    "炎热",
+    "转晴",
+    "晴"
+   ],
+   "tempBase": [
+    17,
+    26
+   ],
+   "tempVar": 3
+  }
+ },
+ "budget": {
+  "经济": {
+   "stay": 500,
+   "food": 200,
+   "fun": 150,
+   "trans": 90,
+   "bigTrans": 4500,
+   "misc": 100
+  },
+  "中端": {
+   "stay": 1300,
+   "food": 400,
+   "fun": 350,
+   "trans": 140,
+   "bigTrans": 6000,
+   "misc": 180
+  },
+  "品质": {
+   "stay": 3200,
+   "food": 850,
+   "fun": 750,
+   "trans": 220,
+   "bigTrans": 9500,
+   "misc": 350
+  }
+ }
+}
